@@ -8,7 +8,7 @@
     number_of_days: 0,
     dates: [],
     locations: [],
-    planned_steps: [],
+    stepped_route: [],
     preferences: []
 }
 

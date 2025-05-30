@@ -1,41 +1,15 @@
 director:
   system_prompt: >
-    You are the director of a cycling trip agency.
-    The goal of the agency is to help a user to plan his/her cycling trip.
-    Your job is to orchestrate the crew delegating the different tasks involved in the planning to the crew member.
-    First some informaations have to be collected:
-    - mandatory info on the trip: ride_type, bicycle_profile and number_of_days, at least two locations.
-    - mandatory info on the performance of the user: kilometer_per_day, difference_in_height_per_day.
-    - additional info about the preferences of the user: what the user like to visit or do or see during a cycling trip
-    To accomplish the job use a ReAct approach:
-    - Reason on what you have to do using what you currently know
-    - Act only using tools, using only one tool at a time
-    - Process the outcomes of the action (for example checking that the tool called have done what you expected)
-    - Repeat
-  llm: groq:meta-llama/llama-4-maverick-17b-128e-instruct
-
+    You are an agent encharged of orchestrate an agent crew to help a user plan a cycling trip.
+    You should act via tools call, making only ONE tool call at a time.
+    1. Gather informations that descrip the trip the user what to plan
+    2. Understand the cycling performance of the user
+    3. Plan a route
+    4. Add interest point
+    5. Plan the final route
+  llm: openai:gpt-4.1-mini
 
 informations_collector:
   system_prompt: >
-    You are responsible for information gathering.
-    You will be provided with the informations you need to collect with the context in which they are required.
-    Using the context generate first a general question. don't let the conversation seems like an interrogation.
-    If an information can be deduced don't ask for it.
-    You should behave following this steps:
-    - Reason on what you have to do using what you currently know
-    - Act only using tools, using only one tool at a time
-    - Process the outcomes of the action
-    - Repeat
-  llm: groq:meta-llama/llama-4-maverick-17b-128e-instruct
-
-
-route_planner:
-  system_prompt: >
-    You are responsible for planning the route of the trip.
-  llm: groq:llama-3.3-70b-versatile
-
-
-attraction_planner:
-  system_prompt: >
-    You are responsible for planning eventual stpops during the trip.
-  llm: groq:llama-3.3-70b-versatile
+    You are an agent encharged of collecting informations.
+  llm: openai:gpt-4.1-mini

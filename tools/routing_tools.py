@@ -1,12 +1,17 @@
 import os, requests
-import json
 import math
+import sys
+
+# just for testing
+current_script_dir = os.path.dirname(os.path.abspath(__file__))
+project_root = os.path.join(current_script_dir, '..')
+sys.path.insert(0, project_root)
 
 from pydantic_ai import RunContext
-# from datastructures import MyDeps
+from datastructures.descriptors import TripDescriptor
+from datastructures.dependencies import MyDeps
 
 
-#def location_to_coordinates(ctx: RunContext[MyDeps], location: str):
 def get_coordinates(location: str) -> tuple[float, float]:
     """Get the geographical coordinates of a location
     Args:
@@ -34,7 +39,7 @@ def get_coordinates(location: str) -> tuple[float, float]:
         json_response = response.json()[0]
         coordinates = (json_response["lat"], json_response["lon"])
     else:
-        print(f"In location_to_coordinates\nInput: \n\tlocation: {location}\nRequest returned with conde: {response.status_code}")
+        print(f"In location_to_coordinates\nInput: \n\tlocation: {location}\nRequest returned with code: {response.status_code}")
         coordinates = tuple()
 
     return coordinates
@@ -99,11 +104,12 @@ def geo_point_distance(a: tuple[float, float, float], b: tuple[float, float, flo
 
 def lon_lat_elv_point_distance(a: list[float], b: list[float]) -> float:
     """
+    Calculate the geographical distance between two points using the Federal Communication Commission formula (for distances under 475 km).
     Args:
-        a: [longitude_a, latitude_a, elvevation_a]
-        b: [longitude_b, latitude_b, elevation_a]
+        a : (latitude_a, longitude_a, elevation_a)
+        b : (latitude_b, longitude_b, elevation_b)
     Returns:
-        geographical distance between point a and point b calculated using Federal Communication Commission formula (for distances not over 475 km)
+        geographical distance between point a and point b in meters
     """
     lat_a, lon_a, _ = a
     lat_b, lon_b, _ = b
@@ -143,10 +149,7 @@ def divide_path(coordinates: list[list[float]], km_per_day: int) -> list[list[li
     return division
 
 
-def fill_trip_descriptor():
-    ...
-
-locations = ["Pordenone", "Polcenigo", "Sacile"]
+locations = ["Via francesco baracca, 37 pordenone", "Polcenigo", "Sacile"]
 locations_coordinates = [get_coordinates(loc) for loc in locations]
 print(locations_coordinates)
 routes = get_routes(locations_coordinates)
@@ -154,3 +157,8 @@ selected_route = routes[1]
 km_per_day = 20
 route_division = divide_path(selected_route, km_per_day)
 for d in route_division : print(d)
+
+"""
+Via francesco baracca, 37 pordenone
+{'place_id': 71290917, 'licence': 'Data © OpenStreetMap contributors, ODbL 1.0. http://osm.org/copyright', 'osm_type': 'node', 'osm_id': 3765105605, 'lat': '45.9683069', 'lon': '12.6754736', 'class': 'place', 'type': 'house', 'place_rank': 30, 'importance': 6.310444800483738e-05, 'addresstype': 'place', 'name': '', 'display_name': '37, Via Francesco Baracca, Torre, Pordenone, Friuli-Venezia Giulia, 33170, Italia', 'boundingbox': ['45.9682569', '45.9683569', '12.6754236', '12.6755236']}
+"""

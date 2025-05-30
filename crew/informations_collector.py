@@ -1,8 +1,9 @@
 import logfire, yaml
 from dotenv import load_dotenv
 from pydantic_ai import Agent, Tool
-from datastructure.dependencies import MyDeps
-from tools.information_gathering_tools import ask_to_the_user, fill_trip_description, fill_performance_description
+from datastructures.dependencies import MyDeps
+from tools.information_gathering_tools import ask_to_the_user
+from tools.filler import fill_trip_description, fill_user_description
 
 
 load_dotenv()
@@ -24,6 +25,6 @@ informations_collector = Agent(
     tools=[
         Tool(ask_to_the_user, takes_ctx=False, docstring_format="google", max_retries=3),
         Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
-        Tool(fill_performance_description, takes_ctx=True, docstring_format="google", max_retries=3)
+        Tool(fill_user_description, takes_ctx=True, docstring_format="google", max_retries=3)
     ]
 )

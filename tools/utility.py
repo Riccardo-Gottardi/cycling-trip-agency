@@ -1,6 +1,6 @@
 from pydantic_ai import RunContext
-from datastructure.dependencies import MyDeps
-from datastructure.descriptors import TripDescriptor, PerformanceDescriptor
+from datastructures.dependencies import MyDeps
+from datastructures.descriptors import TripDescriptor, PerformanceDescriptor
 
 
 def print_trip_descriptor(ctx: RunContext[TripDescriptor]): 

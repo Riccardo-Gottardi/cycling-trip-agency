@@ -1,7 +1,7 @@
 import logfire
 from pydantic_ai import Agent
-from datastructure.descriptors import TripDescriptor, PerformanceDescriptor
-from datastructure.dependencies import MyDeps
+from datastructures.descriptors import TripDescriptor, UserDescription
+from datastructures.dependencies import MyDeps
 from crew.director import director
 
 
@@ -12,7 +12,7 @@ Agent.instrument_all()
 
 def run_director():
     """Main execution function for the director agent"""
-    deps = MyDeps(TripDescriptor(), PerformanceDescriptor())
+    deps = MyDeps(TripDescriptor(), UserDescription())
     director.run_sync(deps=deps)
 
 
