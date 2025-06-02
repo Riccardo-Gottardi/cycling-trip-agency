@@ -1,8 +1,9 @@
 from dataclasses import dataclass
-from datastructures.descriptors import TripDescriptor, UserDescription
+from datastructures.TripDescriptor import TripDescriptor
+from datastructures.UserDescriptor import UserDescriptor
 
 
 @dataclass
 class MyDeps:
     trip: TripDescriptor
-    user: UserDescription
+    user: UserDescriptor

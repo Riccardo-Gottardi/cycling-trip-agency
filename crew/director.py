@@ -29,10 +29,8 @@ director = Agent(
 def add_context_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
     return f"""The trip is described by the following class:
         {str(ctx.deps.trip.model_json_schema())}
-        User's performance is described by the following class:
-        {str(ctx.deps.performance.model_json_schema())}
-        User's preferences is described by the following class:
-        {str(ctx.deps.preferences.model_json_schema())}
+        User is described by the following class:
+        {str(ctx.deps.user.model_json_schema())}
         """
 
 
@@ -46,10 +44,12 @@ def retrieve_informations_from_user(ctx: RunContext[MyDeps], context: str, what_
         - what_to_collect (str): contain the informations to collect, each one followed by a short description.
     Returns:
         - string containing output of the agent
-    Usage:
-        - retrieve_informations_from_user("Collecting informations help the user plan a trip", "bicycle_profile: type of bike used, either ROAD, GRAVEL or MTB, number_of_days: the number of days for the trip")
-        - retrieve_informations_from_user("Understanding the performance of the user", "kilometer_per_day: the amount of kilomenter the user can achieve in a single day")
-        - retrieve_informations_from_user("")
+    Examples:
+    ```python
+    retrieve_informations_from_user("Collecting informations help the user plan a trip", "bicycle_profile: type of bike used, either ROAD, GRAVEL or MTB, number_of_days: the number of days for the trip")
+    retrieve_informations_from_user("Understanding the informations about the user, like his preferences for points of interest", "amenity: the type of amenity the user prefers, like restaurant, bar, etc., turism: the type of touristic pois the user prefere like museum, zoo, etc.")
+    retrieve_informations_from_user("Understand which of the planned route the user prefers", "selected_route: the index of the route selected by the user, among the proposed ones")
+    ```
     """
     result = informations_collector.run_sync(
         f"""The information you have to collect are:
@@ -58,7 +58,7 @@ def retrieve_informations_from_user(ctx: RunContext[MyDeps], context: str, what_
         {context}
         The known informations so far are:
         {ctx.deps.trip}
-        {ctx.deps.performance}
+        {ctx.deps.user}
         """, 
         deps=ctx.deps)
 

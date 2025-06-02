@@ -1,5 +1,6 @@
 from pydantic_ai import RunContext
-from datastructures.descriptors import TripDescriptor, PerformanceDescriptor, PreferencesDescriptor
+from datastructures import TripDescriptor
+from datastructures.UserDescriptor import PerformanceDescriptor, PreferencesDescriptor
 from datastructures.dependencies import MyDeps
 
 
