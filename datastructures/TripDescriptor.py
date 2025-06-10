@@ -1,5 +1,5 @@
 from pydantic import BaseModel, Field
-from datetime import date
+from datetime import date, timedelta
 
 
 class Place(BaseModel):
@@ -10,10 +10,10 @@ class Place(BaseModel):
         lon (float | None): longitude of the place, if None, it will be set automatically
         elv (float | None): elevation of the place, if None, it will be set automatically
     Examples:
-    ```python
-    udine = Place("Udine")
-    louis_pordenone = Place("Louis, Pordenone")
-    ```
+        ```python
+        udine = Place("Udine")
+        louis_pordenone = Place("Louis, Pordenone")
+        ```
     """
     name: str = Field(description="name of the place, it can be a city, a street, a point of interest, etc.")
     lat: float | None = Field(default=None, description="latitude of the place, if None, it will be set automatically")
@@ -21,13 +21,13 @@ class Place(BaseModel):
     elv: float | None = Field(default=None, description="elevation of the place, if None, it will be set automatically")
 
     def model_post_init(self, __context__=None) -> None:
-        self.__set_coordinates(self.name)
+        self.__set_coordinates()
 
-    def __set_coordinates(self, location: str) -> None:
+    def __set_coordinates(self) -> None:
         import requests
         
         params = {
-            "q": f"{location}",
+            "q": self.name,
             "format": "json"
         }
         headers = {
@@ -36,12 +36,14 @@ class Place(BaseModel):
         url = f"https://nominatim.openstreetmap.org/search"
 
         response = requests.get(url, params=params, headers=headers)
-            
-        if response.status_code == 200:
+        response.raise_for_status()
+
+        if response.json():
             json_response = response.json()[0]
-            self.lat, self.lon = json_response["lat"], json_response["lon"]
+            self.lat = float(json_response["lat"])
+            self.lon = float(json_response["lon"])
         else:
-            print(f"In Place.__set_coordinates\nInput: \n\tlocation: {location}\nRequest returned with code: {response.status_code}")
+            raise ValueError(f"Could not find coordinates for the place: {self.name}")
 
     def get_name(self) -> str:
         """Get the name of the place"""
@@ -57,7 +59,6 @@ class Place(BaseModel):
 class TripDescriptor(BaseModel):
     """Description of a bycicle trip
     Args:
-        ride_type (str): either one_way or loop. Tell if the starting point is also the ending point, or not
         bicycle_profile (str): either road, gravel, mtb. Is the type of byke
         number_of_days (int): the number of days the trip will last
         dates (list[date] | None): starting and ending date of the trip
@@ -67,69 +68,102 @@ class TripDescriptor(BaseModel):
         stepped_route (list[list[list[float]]] | None): division of the trip as segments, list of geographical positions
         length (float | None): length of the route in meters
     Examples:
-    ```python
-    trip = TripDescriptor()
-    trip.fill({
-        "ride_type": "one_way",
-        "bicycle_profile": "gravel",
-        "number_of_days": 4,
-    })
-    trip.fill({"places": ["Udine", "Palmanova", "Trieste"]})
-    candidate_routes = trip.get_candidate_raw_routes()
-    ...
-    trip.fill({"selected_raw_route": 0})
+        ```python
+        trip = TripDescriptor()
+        trip.fill({
+            "bicycle_profile": "gravel",
+            "number_of_days": 4,
+        })
+        trip.fill({"places": ["Udine", "Palmanova", "Trieste"]})
+        candidate_routes = trip.get_candidate_raw_routes()
+        ...
+        trip.fill({"selected_raw_route": 0})
+        ```
     """
-    ride_type: str = Field(default="", description="either one_way or loop. Tell if the starting point is also the ending point, or not")
     bicycle_profile: str = Field(default="", description="either road, gravel, mtb. Is the type of byke")
-    number_of_days: int = Field(default=0, description="the number of days the trip will last")
+    number_of_days: int | None = Field(default=None, description="the number of days the trip will last")
     dates: list[date] | None = Field(default=None, description="starting and ending date of the trip")
     places: list[Place] = Field(default=[], description="list of places, the first is the starting point, the last is the ending point")
     candidate_raw_routes: list[list[list[float]]] | None = Field(default=None, description="list of candidate raw routes, each route is a list of geopoints, each geopoint is a list of 3 coordinates (lat, lon, elv)")
     selected_raw_route: int | None = Field(default=None, description="index of the selected raw route, if None, no route was selected")
     stepped_route: list[list[list[float]]] | None = Field(default=None, description="division of the trip as segments, list of geographical positions")
     length: float | None = Field(default=None, description="length of the route in meters")
-
-    def get_ride_type(self) -> str:
-        """Get the type of ride"""
-        return self.ride_type
     
     def get_bicycle_profile(self) -> str:
-        """Get the type of bicycle"""
         return self.bicycle_profile
     
-    def get_number_of_days(self) -> int:
-        """Get the number of days of the trip"""
+    def get_number_of_days(self) -> int | None:
         return self.number_of_days
     
     def get_dates(self) -> list[date] | None:
-        """Get the list of dates of the trip"""
         return self.dates
     
     def get_places(self) -> list[Place]:
-        """Get the list of places"""
         return self.places
     
     def get_candidate_raw_routes(self) -> list[list[list[float]]] | None:
-        """Get the list of candidate raw routes"""
         return self.candidate_raw_routes
     
     def get_selected_raw_route(self) -> int | None:
-        """Get the index of the selected raw route"""
         return self.selected_raw_route
     
     def get_stepped_route(self) -> list[list[list[float]]] | None:
-        """Get the list of segments of the route"""
         return self.stepped_route
     
     def get_length(self) -> float | None:
-        """Get the length of the route in meters"""
         return self.length
+
+    def get_description(self) -> str:
+        """Get a description of the trip"""
+        description = ""
+        
+        if self.bicycle_profile:
+            description += f"Bicycle profile: {self.bicycle_profile}. "
+        if self.number_of_days:
+            description += f"Number of days: {self.number_of_days}. "
+        if len(self.places) > 0: 
+            description += f", from {self.places[0].get_name()} to {self.places[-1].get_name()}. "
+        if self.dates:
+            description += f" Dates: {self.dates[0]} to {self.dates[1]}. "
+        if self.candidate_raw_routes:
+            description += f" Number of candidate routes: {len(self.candidate_raw_routes)}. "
+        if self.selected_raw_route:
+            description += f" Selected route index: {self.selected_raw_route}. "
+        if self.stepped_route:
+            description += f" Number of steps in the route: {len(self.stepped_route)}. "
+        if self.length:
+            description += f" Total length of the route: {self.length} meters. "
+        
+        if description == "":
+            description += "No trip information available."
+        
+        return description
     
+    def __set_bicycle_profile(self, bicycle_profile: str) -> None:
+        if not bicycle_profile in ["road", "gravel", "mtb"]: raise TypeError(f"in TripDescriptor.__set_bicycle_profile()\nThe given bicycle_profile must be one of the following: road, gravel, mtb\n{bicycle_profile} was provided")
+        self.bicycle_profile = bicycle_profile
+
+    def __set_number_of_days(self, number_of_days: int) -> None:
+        if not number_of_days > 0: raise TypeError(f"in TripDescriptor.__set_number_of_days()\nThe given number_of_days must be greater than 0\n{number_of_days} was provided")
+        self.number_of_days = number_of_days
+
+    def __set_dates(self, dates: list[date]) -> None:
+        if not len(dates) > 0: raise TypeError(f"in TripDescriptor.__set_dates()\nThe given dates must contain at least 1 element, the starting date of the trip\n{len(dates)} were provided")
+        self.dates = dates
+        
+    def __set_places(self, places: list[str]) -> None:  
+        if not len(places) > 2: raise TypeError(f"in TripDescriptor.__set_places()\nThe given places must contain at least 2 elements, the starting and ending point of the trip\n{len(places)} were provided")
+        self.places = [Place(name=plc) for plc in places]
+
+    def __set_selected_raw_route(self, selected_raw_route: int) -> None:
+        if self.candidate_raw_routes is None: raise TypeError(f"in RouteDescriptor.__set_selected_route()\nBefore selecting one of the candidate routes they must be created, please fill the route descriptor with places first\n")
+        if not 0 <= selected_raw_route < len(self.candidate_raw_routes): raise TypeError(f"in RouteDescriptor.__set_selected_route()\nThe given selected_raw_route must be between 0 and {len(self.candidate_raw_routes)}\n{selected_raw_route} was provided")
+        self.selected_raw_route = selected_raw_route
+
     def fill(self, things: dict) -> None:
         """Fill the TripDescriptor with the given things
         Args:
             things (dict): dictionary with the attributes to fill the TripDescriptor with. Key is the attribute name, value is the attribute value. settable attributes are:
-                - ride_type (str): either one_way or loop. Tell if the starting point is also the ending point, or not
                 - bicycle_profile (str): either road, gravel, mtb. Is the type of byke
                 - number_of_days (int): the number of days the trip will last
                 - dates (list[date]): starting and ending date of the trip
@@ -138,54 +172,45 @@ class TripDescriptor(BaseModel):
         Raises:
             ValueError: if the given things dictionary contains an invalid key or an invalid value type
         Examples:
-        ```python
-        trip = TripDescriptor()
-        trip.fill({
-            "ride_type": "one_way",
-            "bicycle_profile": "gravel",
-            "number_of_days": 4,
-            "dates": [date(2023, 10, 1), date(2023, 10, 5)],
-            "places": ["Udine", "Palmanova", "Trieste"]
-        })
+            ```python
+            trip = TripDescriptor()
+            trip.fill({
+                "bicycle_profile": "gravel",
+                "number_of_days": 4,
+                "dates": [date(2023, 10, 1), date(2023, 10, 5)],
+                "places": ["Udine", "Palmanova", "Trieste"]
+            })
+            ```
         """
         for key in things.keys():
-            if key == "ride_type":
-                assert isinstance(things["ride_type"], str), f"in TripDescriptor.fill()\nThe given ride_type must be of type string\n{things['ride_type'].__class__} was provided"
-                self.ride_type = things["ride_type"]
-
-            elif key == "bicycle_profile":
-                assert isinstance(things["bicycle_profile"], str), f"in TripDescriptor.fill()\nThe given bicycle_profile must be of type string\n{things['bicycle_profile'].__class__} was provided"
-                assert things["bicycle_profile"] in ["road", "gravel", "mtb"], f"in TripDescriptor.fill()\nThe given bicycle_profile must be one of the following: road, gravel, mtb\n{things['bicycle_profile']} was provided"
-                self.bicycle_profile = things["bicycle_profile"]
+            if key == "bicycle_profile":
+                self.__set_bicycle_profile(things["bicycle_profile"])
                 
             elif key == "number_of_days":
-                assert isinstance(things["number_of_days"], int), f"in TripDescriptor.fill()\nThe given number_of_days must be an of type integer\n{things['number_of_days'].__class__} was provided"
-                assert things["number_of_days"] > 0, f"in TripDescriptor.fill()\nThe given number_of_days must be greater than 0\n{things['number_of_days']} was provided"
-                self.number_of_days = things["number_of_days"]
+                self.__set_number_of_days(things["number_of_days"])
+                self.__correct_eventual_inconsistentcy_between_dates_number_of_days()
 
             elif key == "dates":
-                assert isinstance(things["dates"], list), f"in TripDescriptor.fill()\nThe given dates must be of type list\n{things['dates'].__class__} was provided"
-                if len(things["dates"]) > 0 : assert isinstance(things["dates"][0], date), f"in TripDescriptor.fill()\nThe given dates elements must be of type date\n{things['dates'][0].__class__} was provided"
-                self.dates = things["dates"]
+                self.__set_dates(things["dates"])
+                self.__correct_eventual_inconsistentcy_between_dates_number_of_days()
 
             if key == "places":
-                assert isinstance(things["places"], list), f"in RouteDescriptor.fill()\nThe given places must be of type list, list of place\n{things['places'].__class__} was provided"
-                assert len(things["places"]) > 2, f""
-                assert isinstance(things["places"][0], str), f"in RouteDescriptor.fill()\nThe given places element must be of type str\n{things['places'][0].__class__} was provided"
-                self.places = [Place(name=plc) for plc in things["places"]]
-                self.__plan_candidate_raw_routes()
+                self.__set_places(things["places"])
+                self.plan_candidate_raw_routes()
 
             elif key == "selected_raw_route":
-                assert isinstance(things["selected_raw_route"], int), f"in RouteDescriptor.fill()\nThe given selected_raw_route must be of type integer\n{things['selected_raw_route'].__class__} was provided"
-                assert self.candidate_raw_routes is not None, f"in RouteDescriptor.fill()\nThe candidate_raw_routes must be filled before selecting a raw route, please fill the route descriptor with places first\n"
-                assert 0 <= things["selected_raw_route"] < len(self.candidate_raw_routes), f"in RouteDescriptor.fill()\nThe given selected_raw_route must be between 0 and 3\n{things['selected_raw_route']} was provided"
-                self.selected_raw_route = things["selected_raw_route"]
+                self.__set_selected_raw_route(things["selected_raw_route"])
                 self.__plan_steps()
 
             else:
                 raise ValueError(f"in TripDescriptor.fill()\nAttribute {key} cannot be filled by the user, or it is not a valid attribute of the TripDescriptor class")
 
-    def __get_route(self, idx: int) -> list[list[float]]:
+    def __correct_eventual_inconsistentcy_between_dates_number_of_days(self) -> None:
+        if self.dates is not None and self.number_of_days is not None:
+            if (self.dates[1] - self.dates[0]).days + 1 != self.number_of_days:
+                self.dates[1] = self.dates[0] + timedelta(days=self.number_of_days - 1)
+
+    def __plan_route(self, idx: int) -> list[list[float]]:
         """Get a route that goes through the places provided"""
         import requests
 
@@ -195,22 +220,28 @@ class TripDescriptor(BaseModel):
             lonlats_string = f"{locations_coordinates[i-1][1]},{locations_coordinates[i-1][0]}|{locations_coordinates[i][1]},{locations_coordinates[i][0]}"
             url = f"http://localhost:17777/brouter?lonlats={lonlats_string}&profile={self.bicycle_profile}&alternativeidx={idx}&format=geojson"
             response = requests.get(url)
+            response.raise_for_status()
 
             if response.status_code == 200:
                 route.extend(response.json()["features"][0]["geometry"]["coordinates"])
             else:
-                print(f"In RouteDescriptor.__get_route\nInput: \n\tlocations_coordinates: {locations_coordinates}\nRequest returned with code: {response.status_code}")
+                raise Exception(f"Error in RouteDescriptor.__plan_route()\nThe request to the BRouter API failed with status code {response.status_code}\nURL: {url}\nResponse: {response.text}")
 
         return route
     
-    def __plan_candidate_raw_routes(self) -> list[list[list[float]]]:
+    def plan_candidate_raw_routes(self) -> None:
         """Get 4 different routes that goes through the places provided"""
-        routes = []
+        if self.places is None or len(self.places) < 2:
+            raise Exception("Error in RouteDescriptor.__plan_candidate_raw_routes()\nThe places are not set, please fill the route descriptor with places first\n")
+        if self.bicycle_profile is None or self.bicycle_profile not in ["road", "gravel", "mtb"]:
+            raise Exception("Error in RouteDescriptor.__plan_candidate_raw_routes()\nThe bicycle_profile is not set, please fill the route descriptor with a valid bicycle profile first\n")
+
+        self.candidate_raw_routes = []
+        route = []
         for i in range(4):
-            route = self.__get_route(i)
+            route = self.__plan_route(i)
             if len(route) > 0:
-                routes.append(route)
-        return routes
+                self.candidate_raw_routes.append(route)
     
     def __geopoint_distance(self, a: list[float], b: list[float]) -> float:
         """Calculate the geographical distance between two points using the Federal Communication Commission formula (for distances under 475 km)"""
@@ -257,18 +288,3 @@ class TripDescriptor(BaseModel):
                 self.length += current_distance
                 current_step = [self.stepped_route[-1][-1], geopoint]
                 current_distance = self.__geopoint_distance(current_step[0], geopoint)
-
-    def debug_dict(self) -> dict:
-        """Return a dictionary with the class and value of each attribute for debugging purposes"""
-        return {
-            "ride_type": {"class": self.get_ride_type().__class__, "value": self.get_ride_type()},
-            "bicycle_profile": {"class": self.get_bicycle_profile().__class__, "value": self.get_bicycle_profile()},
-            "number_of_days": {"class": self.get_number_of_days().__class__, "value": self.get_number_of_days()},
-            "dates": {"class": self.get_dates().__class__, "value": self.get_dates()},
-            "places": {"class": self.get_places().__class__, "value": [place.get_name() for place in self.get_places()]},
-            "candidate_raw_routes": {"class": self.get_candidate_raw_routes().__class__, "value": self.get_candidate_raw_routes()},
-            "selected_raw_route": {"class": self.get_selected_raw_route().__class__, "value": self.get_selected_raw_route()},
-            "stepped_route": {"class": self.get_stepped_route().__class__, "value": self.get_stepped_route()},
-            "length": {"class": self.get_length().__class__, "value": self.get_length()}
-        }
-    

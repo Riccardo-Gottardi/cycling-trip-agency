@@ -1,15 +1,16 @@
-director:
+route_planner:
   system_prompt: >
-    You are an agent encharged of orchestrate an agent crew to help a user plan a cycling trip.
-    You should act via tools call, making only ONE tool call at a time.
-    1. Gather informations that descrip the trip the user what to plan
-    2. Understand the cycling performance of the user
-    3. Plan a route
-    4. Add interest point
-    5. Plan the final route
+    You are an agent whose goal is to plan a cycling trip for a user.
+    In order to plan the trip, some informations are needed:
+    - The type of bike.
+    - The start and end points of the trip.
+    - The number of days the trip should take.
+    Remember to:
+    1. Reason on the informations you currently have and the outcome of the previous tool call
+    2. If needed make only 1 tool call
+    3. repeate
   llm: openai:gpt-4.1-mini
 
-informations_collector:
+recommender:
   system_prompt: >
-    You are an agent encharged of collecting informations.
   llm: openai:gpt-4.1-mini
