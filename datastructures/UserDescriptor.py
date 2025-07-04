@@ -41,6 +41,21 @@ class PerformanceDescriptor(BaseModel):
         self.difference_in_height_per_day = difference_in_height_per_day
 
     def fill(self, kilometer_per_day: None | int = None, difference_in_height_per_day: None | int = None) -> None | str:
+        """Fill the performance descriptor with the given things
+        Args:
+            - kilometer_per_day (int) | None : the maximum amount of kilometers the user is able to ride in a day
+            - difference_in_height_per_day (int) | None : the maximum difference of height in meter the user is able to do in a day
+
+        Returns:
+            - None: if nothing went wrong
+            - str: if something went wrong, it will return a string with the error message
+
+        Examples:
+            ```python
+            performance = PerformanceDescriptor()
+            performance.fill(kilometer_per_day=100, difference_in_height_per_day=500)
+            ```
+        """
         if kilometer_per_day != None:
             res = self.__set_kilometer_per_day(kilometer_per_day)
             if res != None:
@@ -315,9 +330,10 @@ class UserDescriptor(BaseModel):
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
+        # This is where you would typically load the user from a persistence system
         # Check if the user exist in the persistance system
-        # If yes, load his performance and preferences
-        # If no, do nothing
+        #   If yes, load his performance and preferences
+        #   If no, do nothing
 
     def get_performance(self) -> PerformanceDescriptor:
         """Get the performance descriptor of the user"""
@@ -373,9 +389,18 @@ class UserDescriptor(BaseModel):
     def fill(self, performance: None | dict = None, preferences: None | dict = None) -> None | str:
         """Fill the user descriptor with the given things
         Args:
-            things (dict): A dictionary containing the user description to fill. The keys must be one of the following:
-                - performance
-                - preferences
+            - performance (dict) | None : a dictionary containing the performance to fill. The keys must be one of the following:
+                - kilometer_per_day
+                - difference_in_height_per_day
+            - preferences (dict) | None : a dictionary containing the preferences to fill. The keys must be one of the following:
+                - amenity
+                - tourism
+                - historic
+                - building
+                - natural
+                - water
+                - leisure
+                - man_made
         Raises:
             ValueError: If the key is not a valid attribute of the UserDescriptor class
         Examples:

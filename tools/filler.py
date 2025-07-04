@@ -17,15 +17,15 @@ def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None,
     
     Examples:
         ```python
-        fill_trip_descriptor(bike_type="gravel")
-        fill_trip_descriptor(places=["Pordenone", "Palmanova"], number_of_days=4)
+        fill_trip_description(bike_type="gravel")
+        fill_trip_description(places=["Pordenone", "Palmanova"], number_of_days=4)
         ```
     """
     ret = ctx.deps.trip.fill(bike_type, places, number_of_days, dates, selected_raw_route)
     if ret != None:
         return ret
 
-def fill_user_description(ctx: RunContext[MyDeps], preferences: dict | None = None, performance: dict | None = None) -> None | str:
+def fill_user_description(ctx: RunContext[MyDeps], preferences: None | dict = None, performance: None | dict = None) -> None | str:
     """A tool to fill the performance description
     Args:
         - preferences (dict) : a dictionary containing the preferences of the user, with keys like amenity and natural, and values being lists of strings

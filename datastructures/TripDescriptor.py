@@ -76,14 +76,15 @@ class TripDescriptor(BaseModel):
     Examples:
         ```python
         trip = TripDescriptor()
-        trip.fill({
-            "bike_type": "gravel",
-            "number_of_days": 4,
-        })
-        trip.fill({"places": Place("Udine"), Place("Palmanova"), Place("Trieste")]})
+        trip.fill(
+            bike_type = "gravel",
+            number_of_days = 4,
+        )
+        trip.fill(places = ["Udine", "Palmanova", "Trieste"])
         candidate_routes = trip.get_candidate_raw_routes()
         ...
-        trip.fill({"selected_raw_route": 0})
+        trip.fill(selected_raw_route = 0)
+        stepped_route = trip.get_stepped_route()
         ```
     """
     bike_type: str = "" 
@@ -200,11 +201,11 @@ class TripDescriptor(BaseModel):
     def fill(self, bike_type: None | str = None, places: None | list[str] = None, number_of_days: None | int = None, dates: None | list[str] = None, selected_raw_route: None | int = None) -> None | str:
         """Fill the TripDescriptor with the given info
         Args:
-            - bike_type (str) : is the type to bike, either road, gravel or mtb.
-            - places (list[str]) : list of places, the first is the starting point, the last is the ending point
-            - number_of_days (int) : the number of days the trip will last
-            - dates (list[str]) : starting and ending date of the trip, formatted following iso 8601
-            - selected_raw_route (int) : index of the selected raw route
+            - bike_type (str) | None : is the type to bike, either road, gravel or mtb.
+            - places (list[str]) | None : list of places, the first is the starting point, the last is the ending point
+            - number_of_days (int) | None : the number of days the trip will last
+            - dates (list[str]) | None : starting and ending date of the trip, formatted following iso 8601
+            - selected_raw_route (int) | None : index of the selected raw route
 
         Return:
             - None: if nothing went wrong
