@@ -37,10 +37,14 @@
 
 
 ---
+To build the container
+```bash
+docker build -t brouter .
+```
 To start brouter
-
+```bash
 docker run --rm -v ./misc/scripts/segments4:/segments4 -v ./misc/profiles2:/profiles2 -p 17777:17777 --name brouter brouter
-
+```
 
 ---
 

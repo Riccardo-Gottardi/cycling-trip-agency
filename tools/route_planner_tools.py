@@ -9,7 +9,7 @@ def ask_to_the_user(question: str) -> str:
         answer = ask_to_the_user("What is your favorite color?")
         ```
     """
-    return input(question)
+    return input(f"{question}\n")
 
 
 def recommendation_agent() -> str:

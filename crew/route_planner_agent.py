@@ -17,7 +17,7 @@ with open("./crew/crew.yaml", "r") as file:
         crew_info = yaml.safe_load(file)
     except yaml.YAMLError as e:
         logfire.log("error", f"Error loading crew.yaml: {e}")
-        raise
+        raise e
 
 
 logfire.log("info", "Creation of: \troute_planner_agent")
@@ -27,7 +27,7 @@ route_planner = Agent(
     system_prompt=crew_info["route_planner"]["system_prompt"],
     tools=[
         Tool(ask_to_the_user, takes_ctx=False, docstring_format="google", max_retries=3),
-        # Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
         # Tool(fill_user_description, takes_ctx=True, docstring_format="google", max_retries=3),
         # Change the tool to take ctx
         # Tool(recommendation_agent, takes_ctx=False, docstring_format="google", max_retries=3)
@@ -35,10 +35,15 @@ route_planner = Agent(
 )
 
 # ========== Add additional context to LLM ===========
+@route_planner.system_prompt()
+def add_descriptors_structure_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
+    return f"""The trip is described by the following class: {str(ctx.deps.trip.model_json_schema())}
+The user is described by the following class: {str(ctx.deps.user.model_json_schema())}
+"""
+
+
 @route_planner.system_prompt(dynamic=True)
-def add_context_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
-    return f"""The trip is described by the following informations:
-        {str(ctx.deps.trip.get_description())}
-        whereas the user by the following informations:
-        {str(ctx.deps.user.get_description())}
-        """
+def add_current_descriptions_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
+    return f"""Current trip informations are: {str(ctx.deps.trip.get_description())}
+Current user informations are: {str(ctx.deps.user.get_description())}
+"""
