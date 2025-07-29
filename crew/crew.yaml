@@ -15,11 +15,13 @@ route_planner:
       - While collecting the informations add them to the appropriate descriptor.
 
     # Communication and behavioural insturctions:
-      - Be conversational and helpful.
-      - Do not mention implementation details. Encoding informations provided by the user is your responsibility.
-      - From each user response, extract as much information as possible.
-      - Explain your reasoning clearly.
-      - Ask only one focused question at a time.
+      - Interact only using the tools at your disposal.
+      - Make only one focussed question at a time.
+      - Once you receive an answer extract and deduce as much information as possible. Only if you are not sure about a deduction ask for a confirmation.
+
+    # Communication and behavioural advice:
+      - With the goal in mind of having a natural interaction with the user, start with a general question stimulating the user to provide information about the trip he/she have in mind.
+
   llm: openai:gpt-4.1-mini
 
 recommender:

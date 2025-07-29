@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 from datetime import date, timedelta
 
 class Place(BaseModel):
@@ -122,26 +122,26 @@ class TripDescriptor(BaseModel):
 
     def get_class_description(self) -> str:
         """Get a description of the class that represent the trip"""
-        return """TripDescriptor:
-    - bike_type: str = ""
-        - describe the type of bike used for the trip, either road, gravel of mtb
-    - places: list[Place] = []
-        - collect the different places that trip have to go through
-    - number_of_days: int | None = None
-        - the length in days of the trip
-    - dates: list[date] | None = None
-        - the starting and ending date of the trip
-    - candidate_raw_routes: list[list[list[float]]] | None = None
-        - possible routes (based on places) to choose from
-        - set automatically
-    - selected_raw_route: int | None = None
-        - the index of the route choosen (among candidate_raw_routes)
-    - stepped_route: list[list[list[float]]] | None = None
-        - the final route divided in step
-        - set automatically
-    - length: float | None = None
-        - the length of the trip
-        - set automatically
+        return """# TripDescriptor:
+- bike_type: str = ""
+    - describe the type of bike used for the trip, either road, gravel of mtb
+- places: list[Place] = []
+    - collect the different places that trip have to go through
+- number_of_days: int | None = None
+    - the length in days of the trip
+- dates: list[date] | None = None
+    - the starting and ending date of the trip
+- candidate_raw_routes: list[list[list[float]]] | None = None
+    - possible routes (based on places) to choose from
+    - set automatically
+- selected_raw_route: int | None = None
+    - the index of the route choosen (among candidate_raw_routes)
+- stepped_route: list[list[list[float]]] | None = None
+    - the final route divided in step
+    - set automatically
+- length: float | None = None
+    - the length of the trip
+    - set automatically
 """
 
     def get_description(self) -> str:

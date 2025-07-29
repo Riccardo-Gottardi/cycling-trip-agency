@@ -14,11 +14,11 @@ class PerformanceDescriptor(BaseModel):
 
     def get_class_description(self) -> str:
         """Get a string description of the class"""
-        return f"""PerformanceDescriptor:
-    - kilometer_per_day: int = 0
-        - the maximum amount of kilometers the user is able to ride in a day
-    - difference_in_height_per_day: int = 0
-        - the maximum difference of height in meter the user is able to do in a day
+        return f"""## PerformanceDescriptor:
+- kilometer_per_day: int = 0
+    - the maximum amount of kilometers the user is able to ride in a day
+- difference_in_height_per_day: int = 0
+    - the maximum difference of height in meter the user is able to do in a day
 """
 
     def get_description(self) -> str:
@@ -112,31 +112,31 @@ class  PreferencesDescriptor(BaseModel):
     
     def get_class_description(self) -> str:
         """Get a string description of the class"""
-        return f"""PreferencesDescriptor:
-    - amenity: list[str] | None = None
-        - the list of amenities the user prefers
-        - can be one or more of the following: {', '.join(self.possible_amenity)}
-    - tourism: list[str] | None = None
-        - the list of tourism points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_tourism)}
-    - historic: list[str] | None = None
-        - the list of historic points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_historic)}
-    - building: list[str] | None = None
-        - the list of buildings the user prefers
-        - can be one or more of the following: {', '.join(self.possible_building)}
-    - natural: list[str] | None = None
-        - the list of natural points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_natural)}
-    - water: list[str] | None = None
-        - the list of water points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_water)}
-    - leisure: list[str] | None = None
-        - the list of leisure points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_leisure)}
-    - man_made: list[str] | None = None
-        - the list of man-made points the user prefers
-        - can be one or more of the following: {', '.join(self.possible_man_made)}
+        return f"""## PreferencesDescriptor:
+- amenity: list[str] | None = None
+    - the list of amenities the user prefers
+    - can be one or more of the following: {', '.join(self.possible_amenity)}
+- tourism: list[str] | None = None
+    - the list of tourism points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_tourism)}
+- historic: list[str] | None = None
+    - the list of historic points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_historic)}
+- building: list[str] | None = None
+    - the list of buildings the user prefers
+    - can be one or more of the following: {', '.join(self.possible_building)}
+- natural: list[str] | None = None
+    - the list of natural points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_natural)}
+- water: list[str] | None = None
+    - the list of water points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_water)}
+- leisure: list[str] | None = None
+    - the list of leisure points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_leisure)}
+- man_made: list[str] | None = None
+    - the list of man-made points the user prefers
+    - can be one or more of the following: {', '.join(self.possible_man_made)}
 """
 
     def get_description(self) -> str:
@@ -345,9 +345,11 @@ class UserDescriptor(BaseModel):
 
     def get_class_description(self) -> str:
         """Get a string description of the class that represent the user"""
-        return f"""UserDescriptor:
-    - performance: PerformanceDescriptor = {self.performance.get_class_description()}
-    - preferences: PreferencesDescriptor = {self.preferences.get_class_description()}
+        return f"""# UserDescriptor:
+- performance: PerformanceDescriptor
+- preferences: PreferenceDescriptor
+{self.performance.get_class_description()}
+{self.preferences.get_class_description()}
 """
 
     def get_description(self) -> str:

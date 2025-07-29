@@ -28,7 +28,7 @@ route_planner = Agent(
     tools=[
         Tool(ask_to_the_user, takes_ctx=False, docstring_format="google", max_retries=3),
         Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
-        # Tool(fill_user_description, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(fill_user_description, takes_ctx=True, docstring_format="google", max_retries=3),
         # Change the tool to take ctx
         # Tool(recommendation_agent, takes_ctx=False, docstring_format="google", max_retries=3)
     ]
@@ -37,8 +37,8 @@ route_planner = Agent(
 # ========== Add additional context to LLM ===========
 @route_planner.system_prompt()
 def add_descriptors_structure_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
-    return f"""The trip is described by the following class: {str(ctx.deps.trip.model_json_schema())}
-The user is described by the following class: {str(ctx.deps.user.model_json_schema())}
+    return f"""The trip is described by the following class:\n{str(ctx.deps.trip.get_class_description())}
+The user is described by the following class:\n{str(ctx.deps.user.get_class_description())}
 """
 
 
