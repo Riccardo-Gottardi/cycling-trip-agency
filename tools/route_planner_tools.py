@@ -1,4 +1,4 @@
-def ask_to_the_user(question: str) -> str:
+def say_to_the_user(question: str) -> str:
     """Ask a question to the user and return the answer.
     Args:
         question (str): The question to ask the user.
@@ -6,7 +6,7 @@ def ask_to_the_user(question: str) -> str:
         str: The user's answer.
     Examples:
         ```python
-        answer = ask_to_the_user("What is your favorite color?")
+        answer = say_to_the_user("What is your favorite color?")
         ```
     """
     return input(f"{question}\n")

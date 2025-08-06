@@ -312,6 +312,7 @@ class UserDescriptor(BaseModel):
     Attributes:
         performance (PerformanceDescriptor): measure of the user cycling performance of the user
         preferences (PreferencesDescriptor): preferences of the user for the points of interest
+        additional_note: a useful additional note about the user, that might fell off from performance and preferences
 
     Examples:
         ```python
@@ -326,7 +327,8 @@ class UserDescriptor(BaseModel):
         ```
     """
     performance: PerformanceDescriptor = PerformanceDescriptor() 
-    preferences: PreferencesDescriptor = PreferencesDescriptor() 
+    preferences: PreferencesDescriptor = PreferencesDescriptor()
+    additional_note: str = ""
 
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
@@ -343,18 +345,25 @@ class UserDescriptor(BaseModel):
         """Get the preferences descriptor of the user"""
         return self.preferences
 
+    def get_additional_note(self) -> str:
+        """Get the additional notes about the user"""
+        return self.additional_note
+
     def get_class_description(self) -> str:
         """Get a string description of the class that represent the user"""
         return f"""# UserDescriptor:
 - performance: PerformanceDescriptor
 - preferences: PreferenceDescriptor
+- addional_note: str
 {self.performance.get_class_description()}
 {self.preferences.get_class_description()}
+## Additional note
+{self.additional_note}
 """
 
     def get_description(self) -> str:
         """Get a string description of the user"""
-        return f"User performance: {self.performance.get_description()}, User preferences: {self.preferences.get_description()}"
+        return f"User performance: {self.performance.get_description()}, User preferences: {self.preferences.get_description()}, Additional note: {self.additional_note}"
 
     def __set_performance(self, performance : dict) -> None | str:
         kilometer_per_day = performance.get("kilometer_per_day", None)
@@ -387,14 +396,17 @@ class UserDescriptor(BaseModel):
         )
         if res != None:
             return res
+        
+    def __set_additional_notes(self, additional_note: str) -> None | str:
+        self.additional_note = additional_note
 
-    def fill(self, performance: None | dict = None, preferences: None | dict = None) -> None | str:
+    def fill(self, performance: None | dict = None, preferences: None | dict = None, additional_note: None | str = None) -> None | str:
         """Fill the user descriptor with the given things
         Args:
-            - performance (dict) | None : a dictionary containing the performance to fill. The keys must be one of the following:
+            - performance (dict | None) : a dictionary containing the performance to fill. The keys must be one of the following:
                 - kilometer_per_day
                 - difference_in_height_per_day
-            - preferences (dict) | None : a dictionary containing the preferences to fill. The keys must be one of the following:
+            - preferences (dict | None) : a dictionary containing the preferences to fill. The keys must be one of the following:
                 - amenity
                 - tourism
                 - historic
@@ -403,6 +415,7 @@ class UserDescriptor(BaseModel):
                 - water
                 - leisure
                 - man_made
+            - additional_note (str | None) : additional notes about the user (that might fall outside the performance and preferences)
         Raises:
             ValueError: If the key is not a valid attribute of the UserDescriptor class
         Examples:
@@ -418,15 +431,21 @@ class UserDescriptor(BaseModel):
                     "tourism": ["museum"]
                 }
             )
+            ...
+            user.fill(additional_note = "The user like to go throug tough climbs"
             ```
         """
         if performance != None:
-            res = self.__set_performance(performance=performance)
+            res = self.__set_performance(performance)
             if res != None:
                 return res
             
         if preferences != None:
-            res = self.__set_preferences(preferences=preferences)
+            res = self.__set_preferences(preferences)
             if res != None:
                 return res
-            
+        
+        if additional_note: # that way it covers both None and "", without using an and statement
+            res = self.__set_additional_notes(additional_note)
+            if res != None:
+                return res
