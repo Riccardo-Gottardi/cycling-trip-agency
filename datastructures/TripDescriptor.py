@@ -62,7 +62,7 @@ class Place(BaseModel):
 
 
 class TripDescriptor(BaseModel):
-    """Description of a bycicle trip
+    """Description of a bicycle trip
     Args:
         bike_type (str): either road, gravel, mtb. Is the type of byke
         places (list[Place]): list of places, the first is the starting point, the last is the ending point
@@ -277,22 +277,11 @@ class TripDescriptor(BaseModel):
         """Get a route that goes through the places provided"""
         import requests
 
-        # TODO remove
-        bike_profile = ""
-        if self.bike_type == "road":
-            bike_profile = "fastbike"
-        elif self.bike_type == "gravel":
-            bike_profile = "trekking-fast"
-        elif self.bike_type == "mtb":
-            bike_profile = "mtb"
-
-        bike_profile = "fastbike"
-
         locations_coordinates = [place.get_coordinates() for place in self.places]
         route = []
         for i in range(1, len(locations_coordinates)):
             lonlats_string = f"{locations_coordinates[i-1][1]},{locations_coordinates[i-1][0]}|{locations_coordinates[i][1]},{locations_coordinates[i][0]}"
-            url = f"http://localhost:17777/brouter?lonlats={lonlats_string}&profile={bike_profile}&alternativeidx={idx}&format=geojson"
+            url = f"http://localhost:17777/brouter?lonlats={lonlats_string}&profile={self.bike_type}&alternativeidx={idx}&format=geojson"
             response = requests.get(url)
             response.raise_for_status()
 
@@ -333,7 +322,17 @@ class TripDescriptor(BaseModel):
         
         return D
     
-    def __plan_steps(self, max_distance: float = 10000.0) -> None | str:
+    def __check_consistency_number_of_days_number_of_steps(self) -> None | str:
+        if not self.number_of_days:
+            return 
+
+        if not self.stepped_route:
+            return "Error in RouteDescriptor.__check_consistency_number_of_days_number_of_steps()\nThe stepped_route is not set, please plan the stepped_route first\n"
+
+        if len(self.stepped_route) > self.number_of_days:
+            return "Error in RouteDescriptor.__check_consistency_number_of_days_number_of_steps()\nThe number of steps in the route is greater than the number of days\n"
+    
+    def __plan_steps(self, max_distance: float = 40000.0) -> None | str:
         """Plan the steps of the route based on the maximum distance"""
         if self.candidate_raw_routes is None or len(self.candidate_raw_routes) == 0:
             return "Error in RouteDescriptor.__plan_steps()\nThe candidate_raw_routes is None, please fill the route descriptor with places first\n"
@@ -359,3 +358,10 @@ class TripDescriptor(BaseModel):
                 self.length += current_distance
                 current_step = [self.stepped_route[-1][-1], geopoint]
                 current_distance = self.__geopoint_distance(current_step[0], geopoint)
+
+        if current_step != self.stepped_route[-1]:
+            self.stepped_route.append(current_step)
+
+        ret = self.__check_consistency_number_of_days_number_of_steps()
+        if ret != None:
+            return ret

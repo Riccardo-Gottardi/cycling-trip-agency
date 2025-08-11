@@ -1,4 +1,4 @@
-# Contesto
+# Context
 ## Bigger project
 Develop an intelligent conversational systems for presonalized cycling trip planning.
 
@@ -22,7 +22,8 @@ LOGFIRE_TOKEN:"<your-token>"
 - Other llms provider can be used, you will need to:
     - Modify the file `crew.yaml` replacing, under the `llm` option, `openai:gpt-4.1-mini` with the desired one. 
     - Modify the api key name in `.env`
-    (eg. if you want to use `groq:llama-3.3-70b-versatile`, write it in the crew.yaml, as described above, the api key in `.env` will be `GROQ_API_KEY`)
+    
+        (eg. if you want to use `groq:llama-3.3-70b-versatile`, write it in the crew.yaml, as described above, the api key in `.env` will be `GROQ_API_KEY`)
 
     More informations, about supported provider and more, can be found at: https://ai.pydantic.dev/models/
 - `LOGFIRE_TOKEN`, is needed for debug purposes. Although it is not strictly required.

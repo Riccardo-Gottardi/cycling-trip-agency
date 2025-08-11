@@ -5,7 +5,7 @@ from pydantic_ai import Agent, RunContext, Tool
 
 from datastructures.dependencies import MyDeps
 
-from tools.route_planner_tools import say_to_the_user, recommendation_agent
+from tools.route_planner_tools import say_to_the_user, get_trip_information, get_route_recommendation
 from tools.filler import fill_trip_description, fill_user_description
 
 
@@ -29,8 +29,9 @@ route_planner = Agent(
         Tool(say_to_the_user, takes_ctx=False, docstring_format="google", max_retries=3),
         Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(fill_user_description, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(get_trip_information, takes_ctx=True, docstring_format="google", max_retries=3),
         # Change the tool to take ctx
-        Tool(recommendation_agent, takes_ctx=False, docstring_format="google", max_retries=3)
+        Tool(get_route_recommendation, takes_ctx=False, docstring_format="google", max_retries=3)
     ]
 )
 
