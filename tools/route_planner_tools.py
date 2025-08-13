@@ -7,32 +7,6 @@ from datastructures.dependencies import MyDeps
 from datastructures.TripDescriptor import Place
 
 
-class TripInfo(Enum): 
-    BIKE_TYPE = "bike_type"
-    PLACES = "places"
-    NUMBER_OF_DAYS = "number_of_days"
-    DATES = "dates"
-    CANDIDATE_ROUTES = "candidate_routes"
-    SELECTED_ROUTE = "selected_route"
-    STEPPED_ROUTE = "stepped_route"
-    LENGTH = "length"
-
-class UserInfo(Enum):
-    class Preference(Enum):
-        AMENITY = "amenity"
-        TOURISM = "tourism"
-        HISTORIC = "historic"
-        BUILDING = "building"
-        NATURAL = "natural"
-        WATER = "water"
-        LEISURE = "leisure"
-        MAN_MADE = "man_made"
-
-    class Performance(Enum):
-        KILOMETER_PER_DAY = "kilometer_per_day"
-        POSITIVE_HEIGHT_DIFFERENCE_PER_DAY = "positive_height_difference_per_day"
-
-
 def say_to_the_user(question: str) -> str:
     """Ask a question to the user and return the answer.
     Args:
@@ -46,71 +20,75 @@ def say_to_the_user(question: str) -> str:
     """
     return input(f"{question}\n")
 
-def get_trip_information(ctx: RunContext[MyDeps], trip_info: TripInfo) -> str | list[Place] | int | list[date] | list[list[list[float]]] | float | None:
+def get_trip_information(ctx: RunContext[MyDeps], trip_info: str) -> str | None:
     """A tool to get an information about the trip.
     Args:
-        trip_info (TripInfo): The type of trip information to retrieve.
+        trip_info (str): The name of the trip information to retrieve from the TripDescriptor.
     Returns:
-        - str | list[Place] | int | list[date] | list[list[list[float]]] | float: The requested trip information.
+        - str: The requested trip information.
         - None: If the requested trip information is not available or was not set yet.
     Examples:
         ```python
-        bike_type = get_trip_information(ctx, TripInfo.BIKE_TYPE)
-        places = get_trip_information(ctx, TripInfo.PLACES)
+        bike_type = get_trip_information(ctx, "bike_type")
+        places = get_trip_information(ctx, "places")
         ```
     """
     match trip_info:
-        case TripInfo.BIKE_TYPE:
+        case "bike_type":
             return ctx.deps.trip.get_bike_type()
-        case TripInfo.PLACES:
-            return ctx.deps.trip.get_places()
-        case TripInfo.NUMBER_OF_DAYS:
-            return ctx.deps.trip.get_number_of_days()
-        case TripInfo.DATES:
-            return ctx.deps.trip.get_dates()
-        case TripInfo.CANDIDATE_ROUTES:
-            return ctx.deps.trip.get_candidate_routes()
-        case TripInfo.SELECTED_ROUTE:
-            return ctx.deps.trip.get_selected_route()
-        case TripInfo.STEPPED_ROUTE:
-            return ctx.deps.trip.get_stepped_route()
-        case TripInfo.LENGTH:
-            return ctx.deps.trip.get_length()
-        
-def get_user_information(ctx: RunContext[MyDeps], user_info: UserInfo):
+        case "places":
+            return str(ctx.deps.trip.get_places())
+        case "number_of_days":
+            return str(ctx.deps.trip.get_number_of_days())
+        case "dates":
+            return str(ctx.deps.trip.get_dates())
+        case "candidate_routes":
+            return str(ctx.deps.trip.get_candidate_routes())
+        case "selected_route":
+            return str(ctx.deps.trip.get_selected_route())
+        case "stepped_route":
+            return str(ctx.deps.trip.get_stepped_route())
+        case "length":
+            return str(ctx.deps.trip.get_length())
+        case "positive_height_difference":
+            return str(ctx.deps.trip.get_positive_height_difference())
+
+def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
     """A tool to get an information about the user.
     Args:
-        user_info (UserInfo): The type of user information to retrieve.
+        user_info (str): The name of the user information to retrieve from the UserDescriptor.
     Returns:
-        - str | None: The requested user information.
+        - str: The requested user information.
         - None: If the requested user information is not available or was not set yet.
     Examples:
         ```python
-        amenity_preferences = get_user_information(ctx, UserInfo.Preference.AMENITY)
-        kilomenter_per_day = get_user_information(ctx, UserInfo.Performance.KILOMETER_PER_DAY)
+        amenity_preferences = get_user_information(ctx, "amenity")
+        kilomenter_per_day = get_user_information(ctx, "kilometer_per_day")
         ```
     """
     match user_info:
-        case UserInfo.Preference.AMENITY:
-            return ctx.deps.user.get_preferences().get_amenity()
-        case UserInfo.Preference.TOURISM:
-            return ctx.deps.user.get_preferences().get_tourism()
-        case UserInfo.Preference.HISTORIC:
-            return ctx.deps.user.get_preferences().get_historic()
-        case UserInfo.Preference.BUILDING:
-            return ctx.deps.user.get_preferences().get_building()
-        case UserInfo.Preference.NATURAL:
-            return ctx.deps.user.get_preferences().get_natural()
-        case UserInfo.Preference.WATER:
-            return ctx.deps.user.get_preferences().get_water()
-        case UserInfo.Preference.LEISURE:
-            return ctx.deps.user.get_preferences().get_leisure()
-        case UserInfo.Preference.MAN_MADE:
-            return ctx.deps.user.get_preferences().get_man_made()
-        case UserInfo.Performance.KILOMETER_PER_DAY:
-            return ctx.deps.user.get_performance().get_kilometer_per_day()
-        case UserInfo.Performance.POSITIVE_HEIGHT_DIFFERENCE_PER_DAY:
-            return ctx.deps.user.get_performance().get_positive_height_difference_per_day
+        case "amenity":
+            return str(ctx.deps.user.get_preferences().get_amenity())
+        case "tourism":
+            return str(ctx.deps.user.get_preferences().get_tourism())
+        case "historic":
+            return str(ctx.deps.user.get_preferences().get_historic())
+        case "building":
+            return str(ctx.deps.user.get_preferences().get_building())
+        case "natural":
+            return str(ctx.deps.user.get_preferences().get_natural())
+        case "water":
+            return str(ctx.deps.user.get_preferences().get_water())
+        case "leisure":
+            return str(ctx.deps.user.get_preferences().get_leisure())
+        case "man_made":
+            return str(ctx.deps.user.get_preferences().get_man_made())
+        case "kilometer_per_day":
+            return str(ctx.deps.user.get_performance().get_kilometer_per_day())
+        case "positive_height_difference_per_day":
+            return str(ctx.deps.user.get_performance().get_positive_height_difference_per_day())
+        case "additional_note":
+            return str(ctx.deps.user.get_additional_note())
 
 def plan_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the candidate routes for the trip.

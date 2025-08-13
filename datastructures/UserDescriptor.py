@@ -12,12 +12,16 @@ class UserDescriptor(BaseModel):
     Examples:
         ```python
         user = UserDescriptor()
-        user.fill(
-            performance = {
-                "kilometer_per_day": 100,
-                "positive_height_difference_per_day": 500
-            }
+        user.set_performance(
+            kilometer_per_day=100,
+            positive_height_difference_per_day=500
         )
+        user.set_preferences(
+            natural={"mountains": 5, "lakes": 4},
+            water={"rivers": 4, "seas": 5},
+            leisure={"hiking": 5, "biking": 4},
+        )
+        user.set_additional_note("User prefers scenic routes.")
         performance = user.get_performance()
         ```
     """
@@ -60,9 +64,7 @@ class UserDescriptor(BaseModel):
         """Get a string description of the user"""
         return f"User performance: {self.performance.get_description()}, User preferences: {self.preferences.get_description()}, Additional note: {self.additional_note}"
 
-    def __set_performance(self, performance : dict) -> None | str:
-        kilometer_per_day = performance.get("kilometer_per_day", None)
-        positive_height_difference_per_day = performance.get("positive_height_difference_per_day", None)
+    def set_performance(self, kilometer_per_day: int | None = None, positive_height_difference_per_day: int | None = None) -> None | str:
         res = self.performance.fill(
             kilometer_per_day=kilometer_per_day,
             positive_height_difference_per_day=positive_height_difference_per_day
@@ -70,15 +72,7 @@ class UserDescriptor(BaseModel):
         if res != None: 
             return res
 
-    def __set_preferences(self, preferences : dict) -> None | str:
-        amenity = preferences.get("amenity", None)
-        tourism = preferences.get("tourism", None)
-        historic = preferences.get("historic", None)
-        building = preferences.get("building", None)
-        natural = preferences.get("natural", None)
-        water = preferences.get("water", None)
-        leisure = preferences.get("leisure", None)
-        man_made = preferences.get("man_made", None)
+    def set_preferences(self, amenity: dict | None = None, tourism: dict | None = None, historic: dict | None = None, building: dict | None = None, natural: dict | None = None, water: dict | None = None, leisure: dict | None = None, man_made: dict | None = None) -> None | str:
         res = self.preferences.fill(
             amenity=amenity,
             tourism=tourism,
@@ -92,55 +86,5 @@ class UserDescriptor(BaseModel):
         if res != None:
             return res
         
-    def __set_additional_notes(self, additional_note: str) -> None | str:
+    def set_additional_note(self, additional_note: str) -> None | str:
         self.additional_note = additional_note
-
-    def fill(self, performance: None | dict = None, preferences: None | dict = None, additional_note: None | str = None) -> None | str:
-        """Fill the user descriptor with the given things
-        Args:
-            - performance (dict | None) : a dictionary containing the performance to fill. The keys must be one of the following:
-                - kilometer_per_day
-                - positive_height_difference_per_day
-            - preferences (dict | None) : a dictionary containing the preferences to fill. The keys must be one of the following:
-                - amenity
-                - tourism
-                - historic
-                - building
-                - natural
-                - water
-                - leisure
-                - man_made
-            - additional_note (str | None) : additional notes about the user (that might fall outside the performance and preferences)
-        Raises:
-            ValueError: If the key is not a valid attribute of the UserDescriptor class
-        Examples:
-            ```python
-            user = UserDescriptor()
-            user.fill(
-                performance = {
-                    "kilometer_per_day": 100,
-                    "positive_height_difference_per_day": 500
-                },
-                preferences = {
-                    "amenity": ["restaurant", "cafe"],
-                    "tourism": ["museum"]
-                }
-            )
-            ...
-            user.fill(additional_note = "The user like to go throug tough climbs"
-            ```
-        """
-        if performance != None:
-            res = self.__set_performance(performance)
-            if res != None:
-                return res
-            
-        if preferences != None:
-            res = self.__set_preferences(preferences)
-            if res != None:
-                return res
-        
-        if additional_note: # that way it covers both None and "", without using an and statement
-            res = self.__set_additional_notes(additional_note)
-            if res != None:
-                return res
