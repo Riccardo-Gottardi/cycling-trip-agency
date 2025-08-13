@@ -4,7 +4,7 @@
 .vscode/*
 
 _old_stuff/*
-tests/*
+test_blackbox/*
 
 bad_doc.md
 note.md
