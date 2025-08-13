@@ -1,9 +1,11 @@
 .venv/*
 .env
 */__pycache__/*
+.vscode/*
+
 _old_stuff/*
-bad_doc.md
-.vscode
-note.md
 tests/*
+
+bad_doc.md
+note.md
 tmp.py
