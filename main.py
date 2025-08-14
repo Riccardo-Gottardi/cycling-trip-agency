@@ -5,6 +5,7 @@ from pydantic_ai import Agent
 
 from datastructures.TripDescriptor import TripDescriptor
 from datastructures.UserDescriptor import UserDescriptor
+from datastructures.Recommendation import Recommendation
 from datastructures.dependencies import MyDeps
 
 load_dotenv()
@@ -18,7 +19,7 @@ from crew.route_planner_agent import route_planner
 
 def run_cycling_trip_agency():
     """Main execution function for the director agent"""
-    deps = MyDeps(TripDescriptor(), UserDescriptor())
+    deps = MyDeps(TripDescriptor(), UserDescriptor(), Recommendation())
     route_planner.run_sync(deps=deps)
 
 

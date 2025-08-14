@@ -22,7 +22,7 @@ def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None,
         ```
     """
     ret = ctx.deps.trip.fill(bike_type, places, number_of_days, dates, selected_route)
-    if ret != None:
+    if ret is not None:
         return ret
 
 def fill_user_preferences_deprecated(ctx: RunContext[MyDeps], amenity: None | dict = None, tourism: None | dict = None, natural: None | dict = None, historic: None | dict = None, building: None | dict = None, water: None | dict = None, leisure: None | dict = None, man_made: None | dict = None) -> None | str:
@@ -42,7 +42,7 @@ def fill_user_preferences_deprecated(ctx: RunContext[MyDeps], amenity: None | di
         ```
     """
     res = ctx.deps.user.preferences.fill(amenity, tourism, natural, historic, building, leisure, man_made)
-    if res != None:
+    if res is not None:
         return res
 
 def fill_user_performance(ctx: RunContext[MyDeps], kilometer_per_day: None | int = None, positive_height_difference_per_day: None | int = None) -> None | str:
@@ -57,7 +57,7 @@ def fill_user_performance(ctx: RunContext[MyDeps], kilometer_per_day: None | int
         ```
     """
     res = ctx.deps.user.performance.fill(kilometer_per_day, positive_height_difference_per_day)
-    if res != None:
+    if res is not None:
         return res
     
 def fill_user_additional_note(ctx: RunContext[MyDeps], additional_note: str) -> None | str:
@@ -70,7 +70,7 @@ def fill_user_additional_note(ctx: RunContext[MyDeps], additional_note: str) -> 
         ```
     """
     res = ctx.deps.user.set_additional_note(additional_note)
-    if res != None:
+    if res is not None:
         return res
 
 def fill_user_preferences(ctx: RunContext[MyDeps], cathegory: str, preference_type: str, preference_detail: list[str]) -> None | str:
@@ -85,5 +85,5 @@ def fill_user_preferences(ctx: RunContext[MyDeps], cathegory: str, preference_ty
         ```
     """
     res = ctx.deps.user.preferences.add_preference(cathegory, preference_type, preference_detail)
-    if res != None:
+    if res is not None:
         return res

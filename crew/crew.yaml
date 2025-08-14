@@ -32,12 +32,13 @@ route_planner:
     ## 2. Route planning
     Goal: Select and refine the route
     Process:
-      TODO: Deleate the fill, meake sure everyting needed is gathered, than proceed with the planning
-      - A collection of candidate routes will be generated automatically.
-      - Select the route (among the candidates).
+    1. Plan the candidate routes - Call appropriate methods to initiate the route planning process.
+    2. Present the candidate routes to the user - Display the available route options.
+    3. Select the route the user prefers - Ask the user which route they prefer.
+    4. Plan the steps of the selected route - Generate daily stages and present them to the user.
 
     Transition to enhancement (optional step of the workflow):
-      - The route is selected.
+    - The route is selected and daily stages are presented to the user.
 
     ## 3. Enhancement (Optional)
     Goal: Refine the trip, adding POIs

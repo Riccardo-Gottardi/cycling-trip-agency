@@ -56,12 +56,12 @@ class PerformanceDescriptor(BaseModel):
             performance.fill(kilometer_per_day=100, positive_height_difference_per_day=500)
             ```
         """
-        if kilometer_per_day != None:
+        if kilometer_per_day is not None:
             res = self.__set_kilometer_per_day(kilometer_per_day)
-            if res != None:
+            if res is not None:
                 return res
         
-        if positive_height_difference_per_day != None:
+        if positive_height_difference_per_day is not None:
             res = self.__set_positive_height_difference_per_day(positive_height_difference_per_day)
-            if res != None:
+            if res is not None:
                 return res

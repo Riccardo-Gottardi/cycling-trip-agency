@@ -2,6 +2,7 @@ import math
 from pydantic import BaseModel
 from datetime import date, timedelta
 from datastructures.Place import Place
+from datastructures.DistanceCalculation import DistanceCalculation
 
 
 class TripDescriptor(BaseModel):
@@ -57,7 +58,7 @@ class TripDescriptor(BaseModel):
     
     def get_selected_route(self) -> int | None:
         return self.selected_route
-    
+
     def get_stepped_route(self) -> list[list[list[float]]] | None:
         return self.stepped_route
     
@@ -173,35 +174,35 @@ class TripDescriptor(BaseModel):
             trip.fill(dates = ["2023-10-1", "2023-10-5"])
             ```
         """
-        if bike_type != None:
+        if bike_type is not None:
             ret = self.__set_bike_type(bike_type) # pyright: ignore[reportArgumentType]
-            if ret != None:
+            if ret is not None:
                 return ret
 
-        if places != None:
+        if places is not None:
             ret = self.__set_places(places) # pyright: ignore[reportArgumentType]
-            if ret != None:
+            if ret is not None:
                 return ret
             
-        if number_of_days != None:
+        if number_of_days is not None:
             ret = self.__set_number_of_days(number_of_days) # pyright: ignore[reportArgumentType]
-            if ret != None:
+            if ret is not None:
                 return ret
             ret = self.__correct_eventual_inconsistentcy_between_dates_number_of_days()
-            if ret != None:
+            if ret is not None:
                 return ret
 
-        if dates != None:
+        if dates is not None:
             ret = self.__set_dates(dates) # pyright: ignore[reportArgumentType]
-            if ret != None:
+            if ret is not None:
                 return ret
             ret = self.__correct_eventual_inconsistentcy_between_dates_number_of_days()
-            if ret != None:
+            if ret is not None:
                 return ret
 
-        if selected_route != None:
+        if selected_route is not None:
             ret = self.__set_selected_route(selected_route) # pyright: ignore[reportArgumentType]
-            if ret != None:
+            if ret is not None:
                 return ret
 
     def __correct_eventual_inconsistentcy_between_dates_number_of_days(self) -> None:
@@ -232,9 +233,9 @@ class TripDescriptor(BaseModel):
     def plan_candidate_routes(self) -> None | str:
         """Get 4 different routes that goes through the places provided"""
         if self.places is None or len(self.places) < 2:
-            return "Error in RouteDescriptor.__plan_candidate_routes()\nThe places are not set, please fill the route descriptor with places first\n"
+            return "Error in RouteDescriptor.plan_candidate_routes()\nThe places are not set, please fill the route descriptor with places first\n"
         if self.bike_type is None or self.bike_type not in ["road", "gravel", "mtb"]:
-            return "Error in RouteDescriptor.__plan_candidate_routes()\nThe bike_type is not set, please fill the route descriptor with a valid bicycle profile first\n"
+            return "Error in RouteDescriptor.plan_candidate_routes()\nThe bike_type is not set, please fill the route descriptor with a valid bicycle profile first\n"
 
         self.candidate_routes = []
         route = []
@@ -243,34 +244,6 @@ class TripDescriptor(BaseModel):
             if len(route) > 0:
                 self.candidate_routes.append(route)
     
-    @classmethod
-    def __fcc_distance(cls, a: list[float], b: list[float]) -> float:
-        """Calculate the geographical distance (in meter) between two points using the Federal Communication Commission formula (for distances under 475 km)"""
-        lat_a, lon_a, _ = a
-        lat_b, lon_b, _ = b
-
-        difference_in_lon = lon_a - lon_b
-        difference_in_lat = lat_a - lat_b
-
-        mean_latitude = (lat_a + lat_b) / 2
-
-        K1 = 111.13209 - 0.56605 * math.cos(2 * mean_latitude) + 0.00120 * math.cos(4 * mean_latitude)
-        K2 = 111.41513 * math.cos(mean_latitude) - 0.09455 * math.cos(3 * mean_latitude) + 0.00012 * math.cos(5 * mean_latitude)
-
-        D = math.sqrt(math.pow(K1 * difference_in_lat, 2) + math.pow(K2 * difference_in_lon, 2))
-        
-        return D * 1000
-    
-    @classmethod
-    def __elevation_distance(cls, a: list[float], b: list[float]) -> float:
-        """Calculate the elevation distance between two geographical points"""
-        squared_distances_sum = 0
-
-        for i in range(len(a)):
-            squared_distances_sum += (a[i] - b[i])**2
-
-        return math.sqrt(squared_distances_sum)
-
     def __check_consistency_number_of_days_number_of_steps(self) -> None | str:
         if not self.number_of_days:
             return 
@@ -297,12 +270,10 @@ class TripDescriptor(BaseModel):
         lat_lon_distance = 0.0
         positive_height_difference = 0.0
         
-        # TODO : correct length calculation
-        # correct the logic to handle correctly the last geopoint in the route
         for geopoint in choosen_raw_route[1:]:
-            lat_lon_distance_increment = self.__fcc_distance(current_step[-1], geopoint)
-            height_increment = self.__elevation_distance(current_step[-1], geopoint)
-            
+            lat_lon_distance_increment = DistanceCalculation.fcc_distance(current_step[-1], geopoint)
+            height_increment = DistanceCalculation.eucledian_distance(current_step[-1], geopoint)
+
             if lat_lon_distance + lat_lon_distance_increment <= max_distance and positive_height_difference + height_increment <= max_elevation:
                 current_step.append(geopoint)
                 lat_lon_distance += lat_lon_distance_increment
@@ -322,5 +293,5 @@ class TripDescriptor(BaseModel):
             self.stepped_route.append(current_step)
 
         ret = self.__check_consistency_number_of_days_number_of_steps()
-        if ret != None:
+        if ret is not None:
             return ret

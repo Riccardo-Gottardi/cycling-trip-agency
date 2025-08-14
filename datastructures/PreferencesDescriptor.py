@@ -173,44 +173,44 @@ class  PreferencesDescriptor(BaseModel):
             )
             ```
         """
-        if amenity != None:
+        if amenity is not None:
             res = self.__set_amenity(amenity)
-            if res != None:
+            if res is not None:
                 return res
         
-        if tourism != None:
+        if tourism is not None:
             res = self.__set_tourism(tourism)
-            if res != None:
+            if res is not None:
                 return res
 
-        if historic != None:
+        if historic is not None:
             res = self.__set_historic(historic)
-            if res != None:
+            if res is not None:
                 return res
 
-        if building != None:
+        if building is not None:
             res = self.__set_building(building)
-            if res != None:
+            if res is not None:
                 return res
             
-        if natural != None:
+        if natural is not None:
             res = self.__set_natural(natural)
-            if res != None:
+            if res is not None:
                 return res
             
-        if water != None:
+        if water is not None:
             res = self.__set_water(water)
-            if res != None:
+            if res is not None:
                 return res
         
-        if leisure != None:
+        if leisure is not None:
             res = self.__set_leisure(leisure)
-            if res != None:
+            if res is not None:
                 return res
             
-        if man_made != None:
+        if man_made is not None:
             res = self.__set_man_made(man_made)
-            if res != None:
+            if res is not None:
                 return res
 
     def add_preference(self, cathegory: str, preference_type: str, preference_detail: list[str]) -> None | str:
@@ -227,5 +227,5 @@ class  PreferencesDescriptor(BaseModel):
         res = self.fill(
             **{cathegory: {preference_type: preference_detail}}
         )
-        if res != None:
+        if res is not None:
             return res

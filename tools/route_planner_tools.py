@@ -89,6 +89,14 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
             return str(ctx.deps.user.get_performance().get_positive_height_difference_per_day())
         case "additional_note":
             return str(ctx.deps.user.get_additional_note())
+        
+def get_recommendations(ctx: RunContext[MyDeps]):
+    """A tool to get the founded recommendations for the trip.
+    Returns:
+        - str: the recommendations for the trip.
+    """
+    recommendations = ctx.deps.recommendation.get_recommended_places()
+    return "".join(f"{r}\n" for r in recommendations)
 
 def plan_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the candidate routes for the trip.
@@ -106,13 +114,19 @@ def plan_the_route_steps(ctx: RunContext[MyDeps]) -> str | None:
     """
     return ctx.deps.trip.plan_steps(max_distance=ctx.deps.user.get_performance().get_kilometer_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
 
-def get_route_recommendation() -> str:
-    """A tool to add point of interest to the route.
+def find_the_recommendations(ctx: RunContext[MyDeps]) -> str | None:
+    """A tool to plan the recommendations for the trip.
     Returns:
-        - string containing output of the agent
-    Examples:
-        ```python
-        get_route_recommendation()
-        ```
+        - str: an error message if something went wrong.
+        - None: if everything went right.
     """
-    return "This is a placeholder for the route recommendation logic."
+    candidate_routes = ctx.deps.trip.get_candidate_routes()
+    selected_route = ctx.deps.trip.get_selected_route()
+    amenityes = ctx.deps.user.get_preferences().get_amenity()
+    
+    if candidate_routes and selected_route and amenityes:
+        route = candidate_routes[selected_route]
+
+        ctx.deps.recommendation.find_route_recommendations(route, amenityes)
+    else:
+        return "No candidate routes or selected route found."

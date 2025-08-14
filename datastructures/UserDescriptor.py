@@ -69,7 +69,7 @@ class UserDescriptor(BaseModel):
             kilometer_per_day=kilometer_per_day,
             positive_height_difference_per_day=positive_height_difference_per_day
         )
-        if res != None: 
+        if res is not None: 
             return res
 
     def set_preferences(self, amenity: dict | None = None, tourism: dict | None = None, historic: dict | None = None, building: dict | None = None, natural: dict | None = None, water: dict | None = None, leisure: dict | None = None, man_made: dict | None = None) -> None | str:
@@ -83,7 +83,7 @@ class UserDescriptor(BaseModel):
             leisure=leisure,
             man_made=man_made
         )
-        if res != None:
+        if res is not None:
             return res
         
     def set_additional_note(self, additional_note: str) -> None | str:

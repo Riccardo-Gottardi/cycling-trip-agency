@@ -54,8 +54,8 @@ class Place(BaseModel):
         """get the user's name"""
         return self.name
 
-    def get_coordinates(self) -> tuple[float, float, float] | str:
+    def get_coordinates(self) -> list[float]:
         """Get the coordinates of the place"""
         if self.lat is None or self.lon is None:
-            return "Coordinates are not set"
-        return (self.lat, self.lon, self.elv) if self.elv is not None else (self.lat, self.lon, 0.0)    
+            return []
+        return [self.lat, self.lon, self.elv] if self.elv is not None else [self.lat, self.lon, 0.0]
