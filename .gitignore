@@ -9,4 +9,5 @@ test_blackbox/*
 
 bad_doc.md
 note.md
+workflow.md
 tmp.py

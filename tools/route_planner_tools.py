@@ -7,6 +7,9 @@ from datastructures.dependencies import MyDeps
 from datastructures.TripDescriptor import Place
 
 
+# TODO  Make the tools used by the agent handle exceptions
+#       They catch the exceptions and return a user-friendly error message.
+
 def say_to_the_user(question: str) -> str:
     """Ask a question to the user and return the answer.
     Args:
@@ -29,8 +32,8 @@ def get_trip_information(ctx: RunContext[MyDeps], trip_info: str) -> str | None:
         - None: If the requested trip information is not available or was not set yet.
     Examples:
         ```python
-        bike_type = get_trip_information(ctx, "bike_type")
-        places = get_trip_information(ctx, "places")
+        bike_type = get_trip_information("bike_type")
+        places = get_trip_information("places")
         ```
     """
     match trip_info:
@@ -62,8 +65,8 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
         - None: If the requested user information is not available or was not set yet.
     Examples:
         ```python
-        amenity_preferences = get_user_information(ctx, "amenity")
-        kilomenter_per_day = get_user_information(ctx, "kilometer_per_day")
+        amenity_preferences = get_user_information("amenity")
+        kilomenter_per_day = get_user_information("kilometer_per_day")
         ```
     """
     match user_info:
@@ -90,27 +93,41 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
         case "additional_note":
             return str(ctx.deps.user.get_additional_note())
         
-def get_recommendations(ctx: RunContext[MyDeps]):
+def get_recommendations(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to get the founded recommendations for the trip.
     Returns:
         - str: the recommendations for the trip.
+        - None: if no recommendations were found or the user preferences were not set.
+    Examples:
+        ```python
+        recommendations = get_recommendations()
+        ```
     """
     recommendations = ctx.deps.recommendation.get_recommended_places()
-    return "".join(f"{r}\n" for r in recommendations)
+    if recommendations is not None or len(recommendations) > 0:
+        return "".join(f"{r}\n" for r in recommendations)
 
-def plan_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
+def generate_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the candidate routes for the trip.
     Returns:
         - str: an error message if something went wrong.
         - None: if everything went right.
+    Examples:
+        ```python
+        error = generate_the_candidate_routes()
+        ```
     """
     return ctx.deps.trip.plan_candidate_routes()
 
-def plan_the_route_steps(ctx: RunContext[MyDeps]) -> str | None:
+def divide_the_route_in_steps(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the steps for the selected route.
     Returns:
         - str: an error message if something went wrong.
         - None: if everything went right.
+    Examples:
+        ```python
+        error = divide_the_route_in_steps()
+        ```
     """
     return ctx.deps.trip.plan_steps(max_distance=ctx.deps.user.get_performance().get_kilometer_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
 
@@ -119,6 +136,10 @@ def find_the_recommendations(ctx: RunContext[MyDeps]) -> str | None:
     Returns:
         - str: an error message if something went wrong.
         - None: if everything went right.
+    Examples:
+        ```python
+        error = find_the_recommendations()
+        ```
     """
     candidate_routes = ctx.deps.trip.get_candidate_routes()
     selected_route = ctx.deps.trip.get_selected_route()

@@ -5,7 +5,7 @@ from pydantic_ai import Agent, RunContext, Tool
 
 from datastructures.dependencies import MyDeps
 
-from tools.route_planner_tools import say_to_the_user, get_trip_information, get_user_information, get_recommendations, plan_the_candidate_routes, plan_the_route_steps, find_the_recommendations
+from tools.route_planner_tools import say_to_the_user, get_trip_information, get_user_information, get_recommendations, generate_the_candidate_routes, divide_the_route_in_steps, find_the_recommendations
 from tools.filler import fill_trip_description, fill_user_preferences, fill_user_performance, fill_user_additional_note
 
 
@@ -34,8 +34,8 @@ route_planner = Agent(
         Tool(get_trip_information, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(get_user_information, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(get_recommendations, takes_ctx=True, docstring_format="google", max_retries=3),
-        Tool(plan_the_candidate_routes, takes_ctx=True, docstring_format="google", max_retries=3),
-        Tool(plan_the_route_steps, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(generate_the_candidate_routes, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(divide_the_route_in_steps, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(find_the_recommendations, takes_ctx=True, docstring_format="google", max_retries=3),
     ]
 )
