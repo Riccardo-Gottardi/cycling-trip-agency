@@ -20,8 +20,8 @@ class DistanceCalculation:
         return D * 1000
     
     @classmethod
-    def __euclidian_distance(cls, a: list[float], b: list[float]) -> float:
-        """Calculate the elevation distance between two geographical points"""
+    def euclidean_distance(cls, a: list[float], b: list[float]) -> float:
+        """Calculate the euclidean distance between two geographical points"""
         squared_distances_sum = 0
 
         for i in range(len(a)):

@@ -33,7 +33,7 @@ class Place(BaseModel):
             "format": "json"
         }
         headers = {
-            "User-Agent": "cycling-trip-acency, Place class"  
+            "User-Agent": "cycling-trip-agency, Place class"  
         }
         url = f"https://nominatim.openstreetmap.org/search"
 

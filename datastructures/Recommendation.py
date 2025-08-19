@@ -1,4 +1,4 @@
-import requests, time
+import requests, time, random
 from pydantic import BaseModel
 from datastructures.Place import Place
 from datastructures.DistanceCalculation import DistanceCalculation
@@ -10,33 +10,36 @@ class Recommendation(BaseModel):
     def get_recommended_places(self) -> list[Place]:
         return self.recommended_places
 
-    def __query_overpass(self, query: str, max_retries: int = 3) -> requests.Response | None:
+    def __query_overpass(self, query: str, max_retries: int = 3) -> requests.Response: # pyright: ignore[reportReturnType]
         url = "https://overpass-api.de/api/interpreter"
 
         for i in range(max_retries):
             try:
                 response = requests.post(url, data=query, headers={'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8'})
-                if response.status_code != 200:
-                    time.sleep(2**i)
-                    continue
+                response.raise_for_status()
                 return response
-            except:
+            except Exception as e:
                 if i == max_retries - 1:
-                    return None
+                    raise e
+                    
+                time.sleep(2**i + random.uniform(0, 1))
 
-    def __get_amenity_pois(self, search_center: list[float], search_radius: int, amenityes: dict) -> list[Place]:
+    def __get_amenity_pois(self, search_center: list[float], search_radius: int, amenities: dict) -> list[Place]:
         lon, lat, _ = search_center
 
         query = "[out:json][timeout:25];("
 
-        for key in amenityes.keys():
-            a = amenityes.get(key)
+        for key in amenities.keys():
+            a = amenities.get(key)
             if a is not None:
                 query += f'node["amenity"="{key}"]["name"~"{"".join(v+"|" for v in a[:len(a)-1])}{a[-1]}"](around:{search_radius},{lat},{lon});' # pyright: ignore[reportOptionalIterable]
 
         query += ");out geom qt 10;"
 
-        data = self.__query_overpass(query)
+        try:
+            data = self.__query_overpass(query)
+        except Exception as e:
+            raise e
 
         recommended_places = []
 
@@ -65,6 +68,9 @@ class Recommendation(BaseModel):
         for i in range(1, len(route)):
             distance_from_previous_search_point += DistanceCalculation.fcc_distance(route[i-1], route[i])
             if distance_from_previous_search_point >= 2*search_radius:
-                pois = self.__get_amenity_pois(route[i], search_radius, amenity)
+                try: 
+                    pois = self.__get_amenity_pois(route[i], search_radius, amenity)
+                except Exception as e:
+                    raise e
                 self.recommended_places.extend(pois)
                 distance_from_previous_search_point = 0.0

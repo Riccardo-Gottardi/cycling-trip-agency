@@ -7,9 +7,6 @@ from datastructures.dependencies import MyDeps
 from datastructures.TripDescriptor import Place
 
 
-# TODO  Make the tools used by the agent handle exceptions
-#       They catch the exceptions and return a user-friendly error message.
-
 def say_to_the_user(question: str) -> str:
     """Ask a question to the user and return the answer.
     Args:
@@ -66,7 +63,7 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
     Examples:
         ```python
         amenity_preferences = get_user_information("amenity")
-        kilomenter_per_day = get_user_information("kilometer_per_day")
+        kilometre_per_day = get_user_information("kilometre_per_day")
         ```
     """
     match user_info:
@@ -86,8 +83,8 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
             return str(ctx.deps.user.get_preferences().get_leisure())
         case "man_made":
             return str(ctx.deps.user.get_preferences().get_man_made())
-        case "kilometer_per_day":
-            return str(ctx.deps.user.get_performance().get_kilometer_per_day())
+        case "kilometre_per_day":
+            return str(ctx.deps.user.get_performance().get_kilometre_per_day())
         case "positive_height_difference_per_day":
             return str(ctx.deps.user.get_performance().get_positive_height_difference_per_day())
         case "additional_note":
@@ -117,20 +114,28 @@ def generate_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
         error = generate_the_candidate_routes()
         ```
     """
-    return ctx.deps.trip.plan_candidate_routes()
+    try:
+        ctx.deps.trip.plan_candidate_routes()
+    except Exception as e:
+        return str(e)
 
-def divide_the_route_in_steps(ctx: RunContext[MyDeps]) -> str | None:
-    """A tool to plan the steps for the selected route.
+def present_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
+    """A tool to present the candidate routes to the user.
     Returns:
         - str: an error message if something went wrong.
         - None: if everything went right.
     Examples:
         ```python
-        error = divide_the_route_in_steps()
+        error = present_the_candidate_routes()
         ```
     """
-    return ctx.deps.trip.plan_steps(max_distance=ctx.deps.user.get_performance().get_kilometer_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
-
+    candidate_routes = ctx.deps.trip.get_candidate_routes()
+    if candidate_routes is not None:
+        for idx, route in enumerate(candidate_routes):
+            print(f"Route {idx + 1}: {route[0]}, {route[len(route)//2]}, {route[-1]}")
+    else:
+        return "No candidate routes available."
+    
 def find_the_recommendations(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the recommendations for the trip.
     Returns:
@@ -143,11 +148,52 @@ def find_the_recommendations(ctx: RunContext[MyDeps]) -> str | None:
     """
     candidate_routes = ctx.deps.trip.get_candidate_routes()
     selected_route = ctx.deps.trip.get_selected_route()
-    amenityes = ctx.deps.user.get_preferences().get_amenity()
+    amenities = ctx.deps.user.get_preferences().get_amenity()
     
-    if candidate_routes and selected_route and amenityes:
+    if candidate_routes and selected_route and amenities:
         route = candidate_routes[selected_route]
-
-        ctx.deps.recommendation.find_route_recommendations(route, amenityes)
+        try:
+            ctx.deps.recommendation.find_route_recommendations(route, amenities)
+        except Exception as e:
+            return str(e)
     else:
-        return "No candidate routes or selected route found."
+        err_message = "Error, the following attributes are missing:"
+        if candidate_routes is None:
+            err_message += " candidate routes"
+        if selected_route is None:
+            err_message += " selected route"
+        if amenities is None:
+            err_message += " amenities"
+            
+        return err_message + "."
+    
+def present_the_recommendation(ctx: RunContext[MyDeps]) -> str | None:
+    """A tool to present the found points of interest to the user.
+    Returns:
+        - str: an error message if something went wrong.
+        - None: if everything went right.
+    Examples:
+        ```python
+        error = present_the_recommendation()
+        ```
+    """
+    recommendations = ctx.deps.recommendation.get_recommended_places()
+    if len(recommendations) > 0:
+        return "".join(f"{r}\n" for r in recommendations)
+    else:
+        return "No recommendations found."
+
+def divide_the_route_in_steps(ctx: RunContext[MyDeps]):
+    """A tool to plan the steps for the selected route.
+    Returns:
+        - str: an error message if something went wrong.
+        - None: if everything went right.
+    Examples:
+        ```python
+        error = divide_the_route_in_steps()
+        ```
+    """
+    try:
+        ctx.deps.trip.plan_steps(max_distance=ctx.deps.user.get_performance().get_kilometre_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
+    except Exception as e:
+        return str(e)

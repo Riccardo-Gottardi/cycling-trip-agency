@@ -7,13 +7,13 @@ class UserDescriptor(BaseModel):
     Attributes:
         performance (PerformanceDescriptor): measure of the user cycling performance of the user
         preferences (PreferencesDescriptor): preferences of the user for the points of interest
-        additional_note: a useful additional note about the user, that might fell off from performance and preferences
+        additional_note (str): a useful additional note about the user, that might fell off from performance and preferences
 
     Examples:
         ```python
         user = UserDescriptor()
         user.set_performance(
-            kilometer_per_day=100,
+            kilometre_per_day=100,
             positive_height_difference_per_day=500
         )
         user.set_preferences(
@@ -53,7 +53,7 @@ class UserDescriptor(BaseModel):
         return f"""# UserDescriptor:
 - performance: PerformanceDescriptor
 - preferences: PreferenceDescriptor
-- addional_note: str
+- additional_note: str
 {self.performance.get_class_description()}
 {self.preferences.get_class_description()}
 ## Additional note
@@ -64,27 +64,29 @@ class UserDescriptor(BaseModel):
         """Get a string description of the user"""
         return f"User performance: {self.performance.get_description()}, User preferences: {self.preferences.get_description()}, Additional note: {self.additional_note}"
 
-    def set_performance(self, kilometer_per_day: int | None = None, positive_height_difference_per_day: int | None = None) -> None | str:
-        res = self.performance.fill(
-            kilometer_per_day=kilometer_per_day,
-            positive_height_difference_per_day=positive_height_difference_per_day
-        )
-        if res is not None: 
-            return res
+    def set_performance(self, kilometre_per_day: int | None = None, positive_height_difference_per_day: int | None = None):
+        try:
+            self.performance.fill(
+                kilometre_per_day=kilometre_per_day,
+                positive_height_difference_per_day=positive_height_difference_per_day
+            )
+        except Exception as e:
+            return e
 
-    def set_preferences(self, amenity: dict | None = None, tourism: dict | None = None, historic: dict | None = None, building: dict | None = None, natural: dict | None = None, water: dict | None = None, leisure: dict | None = None, man_made: dict | None = None) -> None | str:
-        res = self.preferences.fill(
-            amenity=amenity,
-            tourism=tourism,
-            historic=historic,
-            building=building,
-            natural=natural,
-            water=water,
-            leisure=leisure,
-            man_made=man_made
-        )
-        if res is not None:
-            return res
+    def set_preferences(self, amenity: dict | None = None, tourism: dict | None = None, historic: dict | None = None, building: dict | None = None, natural: dict | None = None, water: dict | None = None, leisure: dict | None = None, man_made: dict | None = None):
+        try:
+            self.preferences.fill(
+                amenity=amenity,
+                tourism=tourism,
+                historic=historic,
+                building=building,
+                natural=natural,
+                water=water,
+                leisure=leisure,
+                man_made=man_made
+            )
+        except Exception as e:
+            return e
         
     def set_additional_note(self, additional_note: str) -> None | str:
         self.additional_note = additional_note
