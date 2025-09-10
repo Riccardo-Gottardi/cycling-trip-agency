@@ -4,7 +4,6 @@
 .vscode/*
 
 test_blackbox/*
-experimental_evaluation/*
 
 bad_doc.md
 note.md
