@@ -10,7 +10,7 @@ from datastructures.dependencies import MyDeps
 
 load_dotenv()
 
-logfire.configure()
+logfire.configure(send_to_logfire="if-token-present")
 logfire.instrument_pydantic_ai()
 Agent.instrument_all()
 

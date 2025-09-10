@@ -1,0 +1,248 @@
+{
+	"1": {
+		"message": "Hi, I'm interested in an off-road adventure of 4 days. Specifically I would like to go through Polcenigo, Caneva, Vittorio Veneto and going back to Pordenone (Also the starting point)",
+		"info_collected": {
+			"places": [
+				"Pordenone",
+				"Polcenigo",
+				"Caneva",
+				"Vittorio Veneto",
+				"Pordenone"
+			],
+			"duration": "4"
+		},
+        "note": "Circular route and multi-waypoint extraction"
+	},
+	"2": {
+		"message": "I would like to do 50 km per day, with an elevation gain of 1000 m per day. I will use a mountain bike.",
+		"info_collected": {
+			"bike_type": "mtb",
+			"kilometre_per_day": "50",
+			"positive_height_difference_per_day": "1000"
+		},
+        "note": "Basic multi-parameter extraction"
+	},
+	"3": {
+		"message": "I would like to go with my giant propel from Udine to Tarvisio.",
+		"info_collected": {
+			"bike_type": "road",
+			"places": [
+				"Udine",
+				"Tarvisio"
+			]
+		},
+        "note": "Bike model inference (Giant Propel → road bike)"
+	},
+	"4": {
+		"message": "I want to ride from Trieste to Gorizia.",
+		"info_collected": {
+			"places": [
+				"Trieste",
+				"Gorizia"
+			]
+		},
+        "note": "Minimal route extraction"
+	},
+	"5": {
+		"message": "I would like to go to Zoppola.",
+		"info_collected": {},
+        "note": "Incomplete route information handling"
+	},
+    "6": {
+        "message": "",
+        "info_collected": {},
+        "note": "Empty input handling"
+    },
+    "7": {
+        "message": "I would like to make a trip from Udine to San daniele del friuli using my road bike. Currently I can easily handle 80km per day with an elevation gain of 1000m per day.",
+        "info_collected": {
+            "bike_type": "road",
+            "places": [
+                "Udine",
+                "San daniele del friuli"
+            ],
+            "kilometre_per_day": "80",
+            "positive_height_difference_per_day": "1000"
+        },
+        "note": "Comprehensive extraction while ignoring capability context"
+    },
+    "8": {
+        "message": "I'll use my bike to go from Pordenone to Sacile.",
+        "info_collected": {
+            "places": [
+                "Pordenone",
+                "Sacile"
+            ]
+        },
+        "note": "Testing ambiguous bike reference - no bike_type should be extracted"
+    },
+    "9": {
+        "message": "I want to cycle 30 miles per day with 3000 feet of climbing daily from Venice to Padova.",
+        "info_collected": {
+            "places": [
+                "Venice",
+                "Padova"
+            ],
+            "kilometre_per_day": "48.3",
+            "positive_height_difference_per_day": "914"
+        },
+        "note": "Testing imperial to metric conversion (30 miles = ~48.3km, 3000 feet = ~914m)"
+    },
+    "10": {
+        "message": "I want a 3-day trip from Udine to Trieste. Actually, make it 5 days instead.",
+        "info_collected": {
+            "places": [
+                "Udine",
+                "Trieste"
+            ],
+            "duration": "5"
+        },
+        "note": "Testing conflicting information handling - should use the corrected value"
+    },
+    "11": {
+        "message": "I'm a complete beginner cyclist wanting to go from Treviso to Belluno.",
+        "info_collected": {
+            "places": [
+                "Treviso",
+                "Belluno"
+            ]
+        },
+        "note": "Testing implicit information - should NOT infer daily distance from 'beginner'"
+    },
+    "12": {
+        "message": "I have both a road bike and mountain bike. I want to go through the Dolomites for 6 days.",
+        "info_collected": {
+            "duration": "6"
+        },
+        "note": "Testing multiple bike types mentioned - should not extract bike_type when unclear"
+    },
+    "13": {
+        "message": "Next weekend I want to ride from Grado to Aquileia, early morning departure.",
+        "info_collected": {
+            "places": [
+                "Grado",
+                "Aquileia"
+            ]
+        },
+        "note": "Testing temporal information - should not extract specific dates/times"
+    },
+    "14": {
+        "message": "I want an easy, flat route from Conegliano to Oderzo, nothing too challenging.",
+        "info_collected": {
+            "places": [
+                "Conegliano",
+                "Oderzo"
+            ]
+        },
+        "note": "Testing difficulty preferences - should not extract specific difficulty levels"
+    },
+    "15": {
+        "message": "Me and my 3 friends want to cycle from Palmanova to Cervignano, we'll need hotel accommodations.",
+        "info_collected": {
+            "places": [
+                "Palmanova",
+                "Cervignano"
+            ]
+        },
+        "note": "Testing group size and accommodation - should not extract these unless explicitly supported"
+    },
+    "16": {
+        "message": "I want to drive from Spilimbergo to Maniago for sightseeing.",
+        "info_collected": {},
+        "note": "Negative test - not a cycling request, should extract nothing"
+    },
+    "17": {
+        "message": "Can you recommend a good restaurant in Cividale del Friuli?",
+        "info_collected": {},
+        "note": "Negative test - not a cycling request, should extract nothing"
+    },
+    "18": {
+        "message": "I want to cycle fifty kilometers per day with one thousand meters elevation gain using my mountain bike from Tolmezzo to Gemona.",
+        "info_collected": {
+            "bike_type": "mtb",
+            "places": [
+                "Tolmezzo",
+                "Gemona"
+            ],
+            "kilometre_per_day": "50",
+            "positive_height_difference_per_day": "1000"
+        },
+        "note": "Testing written numbers vs digits"
+    },
+    "19": {
+        "message": "I want to go from Udina to Tarviso using my gravel bike.",
+        "info_collected": {
+            "bike_type": "gravel",
+            "places": [
+                "Udine",
+                "Tarvisio"
+            ]
+        },
+        "note": "Testing misspelled place names and non-standard bike type"
+    },
+    "20": {
+        "message": "Planning a trip da Pordenone a Aviano con la mia bici da strada.",
+        "info_collected": {
+            "bike_type": "road",
+            "places": [
+                "Pordenone",
+                "Aviano"
+            ]
+        },
+        "note": "Testing mixed Italian/English (road bike = bici da strada)"
+    },
+    "21": {
+        "message": "I'm cycling 40km daily, 800m elevation, road bike, from Monfalcone to Ronchi dei Legionari to Gradisca d'Isonzo.",
+        "info_collected": {
+            "bike_type": "road",
+            "places": [
+                "Monfalcone",
+                "Ronchi dei Legionari",
+                "Gradisca d'Isonzo"
+            ],
+            "kilometre_per_day": "40",
+            "positive_height_difference_per_day": "800"
+        },
+        "note": "Testing multiple waypoints and compact information format"
+    },
+    "22": {
+        "message": "I want to do 60 km per day and also 40 km per day, from Lignano to Bibione.",
+        "info_collected": {
+            "places": [
+                "Lignano",
+                "Bibione"
+            ]
+        },
+        "note": "Testing contradictory distance information - should extract nothing for distance"
+    },
+    "23": {
+        "message": "From San Vito al Tagliamento to Casarsa della Delizia, I'll ride my Bianchi Oltre XR4.",
+        "info_collected": {
+            "bike_type": "road",
+            "places": [
+                "San Vito al Tagliamento",
+                "Casarsa della Delizia"
+            ]
+        },
+        "note": "Testing specific bike model inference (Bianchi Oltre XR4 = road bike)"
+    },
+    "24": {
+        "message": "Cycling adventure: Latisana -> Precenicco -> Palazzolo dello Stella, 25km/day, 200m climbing, hybrid bike.",
+        "info_collected": {
+            "bike_type": "hybrid",
+            "places": [
+                "Latisana",
+                "Precenicco",
+                "Palazzolo dello Stella"
+            ],
+            "kilometre_per_day": "25",
+            "positive_height_difference_per_day": "200"
+        },
+        "note": "Testing arrow notation and abbreviated format"
+    },
+    "25": {
+        "message": "I want to cycle exactly 0 kilometers per day from nowhere to everywhere on my unicycle.",
+        "info_collected": {},
+        "note": "Testing nonsensical input - should extract nothing"
+    }
+}

@@ -2,12 +2,12 @@ from pydantic_ai import RunContext
 from datastructures.dependencies import MyDeps
 
 
-def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None, places: None | list[str] = None, number_of_days: None | int = None, dates: None | list[str] = None, selected_route: None | int = None) -> None | str:
+def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None, places: None | list[str] = None, duration: None | int = None, dates: None | list[str] = None, selected_route: None | int = None) -> None | str:
     """A tool to fill the trip description
     Args:
         - bike_type (str) : is the type to bike, either road, gravel or mtb.
         - places (list[str]) : list of places, the first is the starting point, the last is the ending point
-        - number_of_days (int) : the number of days the trip will last
+        - duration (int) : the number of days the trip will last
         - dates (list[str]) : starting and ending date of the trip, formatted following iso 8601
         - selected_route (int) : index of the selected raw route
 
@@ -18,11 +18,11 @@ def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None,
     Examples:
         ```python
         fill_trip_description(bike_type="gravel")
-        fill_trip_description(places=["Pordenone", "Palmanova"], number_of_days=4)
+        fill_trip_description(places=["Pordenone", "Palmanova"], duration=4)
         ```
     """
     try:
-        ctx.deps.trip.fill(bike_type, places, number_of_days, dates, selected_route)
+        ctx.deps.trip.fill(bike_type, places, duration, dates, selected_route)
     except Exception as e:
         return str(e)
 
@@ -43,23 +43,24 @@ def fill_user_preferences_deprecated(ctx: RunContext[MyDeps], amenity: None | di
         ```
     """
     try:
-        ctx.deps.user.preferences.fill(amenity, tourism, natural, historic, building, leisure, man_made)
+        ctx.deps.user.preferences.fill(amenity, tourism, natural, historic, building, water, leisure, man_made)
     except Exception as e:
         return str(e)
     
-def fill_user_preferences(ctx: RunContext[MyDeps], category: str, preference_type: str, preference_detail: list[str]) -> None | str:
+def fill_pois_preferences(ctx: RunContext[MyDeps], poi_category: str, poi_preference_type: str, poi_preference_detail: list[str]) -> None | str:
     """A tool to fill the user preferences
     Args:
-        - category (str) : the category of the preference, e.g. "amenity", "tourism", etc.
-        - preference_type (str) : the type of the preference, e.g. "restaurant", "museums", etc.
-        - preference_detail (list[str]) : a list of details for the preference, e.g. ["Italian", "Chinese"]
+        - poi_category (str) : the category of the preference, e.g. "amenity", "tourism", etc.
+        - poi_preference_type (str) : the type of the preference, e.g. "restaurant", "museums", etc.
+        - poi_preference_detail (list[str]) : a list of details for the preference, e.g. ["Italian", "Chinese"]
     Examples:
         ```python
-        fill_user_preferences(category="amenity", preference_type="restaurant", preference_detail=["Italian", "Chinese"])
+        fill_user_preferences(poi_category="amenity", poi_preference_type="restaurant", poi_preference_detail=["Italian", "Chinese"])
+        fill_user_preferences(poi_category="water", poi_preference_type="lake", poi_preference_detail=["laghi di fusine"])
         ```
     """
     try:
-        ctx.deps.user.preferences.add_preference(category, preference_type, preference_detail)
+        ctx.deps.user.preferences.add_pois_preference(poi_category, poi_preference_type, poi_preference_detail)
     except Exception as e:
         return str(e)
 
@@ -79,7 +80,7 @@ def fill_user_performance(ctx: RunContext[MyDeps], kilometre_per_day: None | int
     except Exception as e:
         return str(e)
     
-def fill_user_additional_note(ctx: RunContext[MyDeps], additional_note: str) -> None | str:
+def fill_user_additional_note(ctx: RunContext[MyDeps], additional_note: str):
     """A tool to fill the additional note description
     Args:
         - additional_note (str) : the additional note about the user
@@ -88,6 +89,4 @@ def fill_user_additional_note(ctx: RunContext[MyDeps], additional_note: str) -> 
         fill_user_additional_note(additional_note="User prefers scenic routes")
         ```
     """
-    res = ctx.deps.user.set_additional_note(additional_note)
-    if res is not None:
-        return res
+    ctx.deps.user.set_additional_note(additional_note)

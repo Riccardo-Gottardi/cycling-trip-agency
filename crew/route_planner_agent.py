@@ -5,8 +5,8 @@ from pydantic_ai import Agent, RunContext, Tool
 
 from datastructures.dependencies import MyDeps
 
-from tools.route_planner_tools import say_to_the_user, get_trip_information, get_user_information, get_recommendations, generate_the_candidate_routes, present_the_candidate_routes, find_the_recommendations, present_the_recommendation, divide_the_route_in_steps
-from tools.filler import fill_trip_description, fill_user_preferences, fill_user_performance, fill_user_additional_note
+from tools.route_planner_tools import say_to_the_user, get_trip_information, get_user_information, get_recommendations, generate_the_candidate_routes, present_the_candidate_routes, find_the_recommendations, present_the_recommendation, divide_the_route_in_steps, present_the_stepped_route
+from tools.filler import fill_trip_description, fill_pois_preferences, fill_user_performance, fill_user_additional_note
 
 
 load_dotenv()
@@ -28,7 +28,7 @@ route_planner = Agent(
     tools=[
         Tool(say_to_the_user, takes_ctx=False, docstring_format="google", max_retries=3),
         Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),
-        Tool(fill_user_preferences, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(fill_pois_preferences, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(fill_user_performance, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(fill_user_additional_note, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(get_trip_information, takes_ctx=True, docstring_format="google", max_retries=3),
@@ -39,6 +39,7 @@ route_planner = Agent(
         Tool(present_the_candidate_routes, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(present_the_recommendation, takes_ctx=True, docstring_format="google", max_retries=3),
         Tool(divide_the_route_in_steps, takes_ctx=True, docstring_format="google", max_retries=3),
+        Tool(present_the_stepped_route, takes_ctx=True, docstring_format="google", max_retries=3),
     ]
 )
 

@@ -1,4 +1,5 @@
 from pydantic import BaseModel
+import requests
 from datetime import date, timedelta
 from datastructures.Place import Place
 from datastructures.DistanceCalculation import DistanceCalculation
@@ -9,7 +10,7 @@ class TripDescriptor(BaseModel):
     Args:
         bike_type (str | None): either road, gravel, mtb. Is the type of bike
         places (list[Place] | None): list of places, the first is the starting point, the last is the ending point
-        number_of_days (int | None): the number of days the trip will last
+        duration (int | None): the number of days the trip will last
         dates (list[date] | None): starting and ending date of the trip
         candidate_routes (list[list[list[float]]] | None): list of candidate raw routes, each route is a list of geopoints, each geopoint is a list of 3 coordinates (lat, lon, elv)
         selected_route (int | None): index of the selected raw route
@@ -21,7 +22,7 @@ class TripDescriptor(BaseModel):
         trip = TripDescriptor()
         trip.fill(
             bike_type = "gravel",
-            number_of_days = 4,
+            duration = 4,
         )
         trip.fill(places = ["Udine", "Palmanova", "Trieste"])
         candidate_routes = trip.get_candidate_routes()
@@ -32,7 +33,7 @@ class TripDescriptor(BaseModel):
     """
     bike_type: str | None = None
     places: list[Place] | None = None
-    number_of_days: int | None = None
+    duration: int | None = None
     dates: list[date] | None = None
     candidate_routes: list[list[list[float]]] | None = None
     selected_route: int | None = None
@@ -46,8 +47,8 @@ class TripDescriptor(BaseModel):
     def get_places(self) -> list[Place] | None:
         return self.places
 
-    def get_number_of_days(self) -> int | None:
-        return self.number_of_days
+    def get_duration(self) -> int | None:
+        return self.duration
     
     def get_dates(self) -> list[date] | None:
         return self.dates
@@ -67,14 +68,15 @@ class TripDescriptor(BaseModel):
     def get_positive_height_difference(self) -> float | None:
         return self.positive_height_difference
 
-    def get_class_description(self) -> str:
+    @classmethod
+    def get_class_description(cls) -> str:
         """Get a description of the class that represent the trip"""
         return """# TripDescriptor:
 - bike_type: str | None = None
     - describe the type of bike used for the trip, either road, gravel of mtb
 - places: list[Place] | None = None
     - collect the different places that trip have to go through
-- number_of_days: int | None = None
+- duration: int | None = None
     - the maximum number of days the user wants to spend on the trip
 - dates: list[date] | None = None
     - the starting and ending date of the trip
@@ -98,8 +100,8 @@ class TripDescriptor(BaseModel):
         
         if self.bike_type:
             description += f"Bicycle profile: {self.bike_type}. "
-        if self.number_of_days:
-            description += f"Number of days: {self.number_of_days}. "
+        if self.duration:
+            description += f"Number of days: {self.duration}. "
         if self.places and len(self.places) > 0: 
             description += f", from {self.places[0].get_name()} to {self.places[-1].get_name()}. "
         if self.dates:
@@ -135,9 +137,9 @@ class TripDescriptor(BaseModel):
         if not_found != "":
             raise Exception(f"Error in TripDescriptor.__set_places()\nFor the following places were not found: {not_found}")
 
-    def __set_number_of_days(self, number_of_days: int):
-        if not number_of_days > 0: raise Exception(f"Error in TripDescriptor.__set_number_of_days()\nThe given number_of_days must be greater than 0\n{number_of_days} was provided")
-        self.number_of_days = number_of_days
+    def __set_duration(self, duration: int):
+        if not duration > 0: raise Exception(f"Error in TripDescriptor.__set_duration()\nThe given duration must be greater than 0\n{duration} was provided")
+        self.duration = duration
 
     def __set_dates(self, dates: list[str]):
         if not len(dates) > 0: raise Exception(f"Error in TripDescriptor.__set_dates()\nThe given dates must contain at least 1 element, the starting date of the trip\n{len(dates)} were provided")
@@ -148,12 +150,12 @@ class TripDescriptor(BaseModel):
         if not 0 <= selected_route < len(self.candidate_routes): raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nThe given selected_route must be between 0 and {len(self.candidate_routes)}\n{selected_route} was provided")
         self.selected_route = selected_route
 
-    def fill(self, bike_type: None | str = None, places: None | list[str] = None, number_of_days: None | int = None, dates: None | list[str] = None, selected_route: None | int = None):
+    def fill(self, bike_type: None | str = None, places: None | list[str] = None, duration: None | int = None, dates: None | list[str] = None, selected_route: None | int = None):
         """Fill the TripDescriptor with the given info
         Args:
             - bike_type (str) | None : is the type to bike, either road, gravel or mtb.
             - places (list[str]) | None : list of places, the first is the starting point, the last is the ending point
-            - number_of_days (int) | None : the number of days the trip will last
+            - duration (int) | None : the number of days the trip will last
             - dates (list[str]) | None : starting and ending date of the trip, formatted following iso 8601
             - selected_route (int) | None : index of the selected raw route
 
@@ -166,7 +168,7 @@ class TripDescriptor(BaseModel):
             trip = TripDescriptor()
             trip.fill(
                 bike_type = "gravel",
-                number_of_days = 4,
+                duration = 4,
                 places = ["Udine", "Palmanova", "Trieste"],
             )
             ...
@@ -185,17 +187,17 @@ class TripDescriptor(BaseModel):
             except Exception as e:
                 raise e
 
-        if number_of_days is not None:
+        if duration is not None:
             try:
-                self.__set_number_of_days(number_of_days) 
-                self.__correct_eventual_inconsistency_between_dates_number_of_days()
+                self.__set_duration(duration) 
+                self.__correct_eventual_inconsistency_between_dates_duration()
             except Exception as e:
                 raise e
 
         if dates is not None:
             try:
                 self.__set_dates(dates) 
-                self.__correct_eventual_inconsistency_between_dates_number_of_days()
+                self.__correct_eventual_inconsistency_between_dates_duration()
             except Exception as e:
                 raise e
 
@@ -205,15 +207,13 @@ class TripDescriptor(BaseModel):
             except Exception as e:
                 raise e
 
-    def __correct_eventual_inconsistency_between_dates_number_of_days(self) -> None:
-        if self.dates is not None and self.number_of_days is not None:
-            if (self.dates[1] - self.dates[0]).days + 1 != self.number_of_days:
-                self.dates[1] = self.dates[0] + timedelta(days=self.number_of_days - 1)
+    def __correct_eventual_inconsistency_between_dates_duration(self) -> None:
+        if self.dates is not None and self.duration is not None:
+            if (self.dates[1] - self.dates[0]).days + 1 != self.duration:
+                self.dates[1] = self.dates[0] + timedelta(days=self.duration - 1)
 
     def __plan_route(self, idx: int) -> list[list[float]]:
         """Get a route that goes through the places provided"""
-        import requests
-
         bike_profile = self.bike_type
         if self.bike_type == "road":
             bike_profile = "fastbike"
@@ -221,8 +221,8 @@ class TripDescriptor(BaseModel):
         locations_coordinates = [place.get_coordinates() for place in self.places] # pyright: ignore[reportOptionalIterable]
         route = []
         for i in range(1, len(locations_coordinates)):
-            lonlats_string = f"{locations_coordinates[i-1][1]},{locations_coordinates[i-1][0]}|{locations_coordinates[i][1]},{locations_coordinates[i][0]}"
-            url = f"http://localhost:17777/brouter?lonlats={lonlats_string}&profile={bike_profile}&alternativeidx={idx}&format=geojson"
+            lon_lat_string = f"{locations_coordinates[i-1][1]},{locations_coordinates[i-1][0]}|{locations_coordinates[i][1]},{locations_coordinates[i][0]}"
+            url = f"http://localhost:17777/brouter?lonlats={lon_lat_string}&profile={bike_profile}&alternativeidx={idx}&format=geojson"
             response = requests.get(url)
             response.raise_for_status()
 
@@ -231,14 +231,13 @@ class TripDescriptor(BaseModel):
         return route
     
     def plan_candidate_routes(self):
-        """Get 4 different routes that goes through the places provided"""
+        """Plan 4 different routes that goes through the places provided"""
         if self.places is None or len(self.places) < 2:
             raise Exception("Error in RouteDescriptor.plan_candidate_routes()\nThe places are not set, please fill the route descriptor with places first\n")
         if self.bike_type is None or self.bike_type not in ["road", "gravel", "mtb"]:
             raise Exception("Error in RouteDescriptor.plan_candidate_routes()\nThe bike_type is not set, please fill the route descriptor with a valid bicycle profile first\n")
 
         self.candidate_routes = []
-        route = []
         for i in range(4):
             try:
                 route = self.__plan_route(i)
@@ -247,14 +246,14 @@ class TripDescriptor(BaseModel):
             if len(route) > 0:
                 self.candidate_routes.append(route)
     
-    def __check_consistency_number_of_days_number_of_steps(self) -> None | str:
+    def __check_consistency_duration_number_of_steps(self) -> None | str:
         if not self.stepped_route:
-            raise Exception("Error in RouteDescriptor.__check_consistency_number_of_days_number_of_steps()\nThe stepped_route is not set, please plan the stepped_route first\n")
+            raise Exception("Error in RouteDescriptor.__check_consistency_duration_number_of_steps()\nThe stepped_route is not set, please plan the stepped_route first\n")
 
-        if self.number_of_days and len(self.stepped_route) > self.number_of_days:
-            raise Exception("Error in RouteDescriptor.__check_consistency_number_of_days_number_of_steps()\nThe number of steps in the route is greater than the number of days\n")
+        if self.duration and len(self.stepped_route) > self.duration:
+            raise Exception("Error in RouteDescriptor.__check_consistency_duration_number_of_steps()\nThe number of steps in the route is greater than the number of days\n")
     
-    def plan_steps(self, max_distance: float = 40000.0, max_elevation: float = 500.0):
+    def plan_steps(self, max_horizontal_distance: float = 40.0, max_elevation: float = 500.0):
         """Plan the steps of the route based on the maximum distance"""
         if self.candidate_routes is None or len(self.candidate_routes) == 0:
             raise Exception("Error in RouteDescriptor.__plan_steps()\nThe candidate_routes is None, please fill the route descriptor with places first\n")
@@ -267,24 +266,24 @@ class TripDescriptor(BaseModel):
         self.positive_height_difference = 0.0
         chosen_raw_route = self.candidate_routes[self.selected_route]
         current_step = [chosen_raw_route[0]]
-        lat_lon_distance = 0.0
+        horizontal_distance = 0.0
         positive_height_difference = 0.0
         
         for geopoint in chosen_raw_route[1:]:
-            lat_lon_distance_increment = DistanceCalculation.fcc_distance(current_step[-1], geopoint)
-            height_increment = DistanceCalculation.euclidean_distance(current_step[-1], geopoint)
+            horizontal_distance_increment = DistanceCalculation.fcc_distance(current_step[-1], geopoint)
+            positive_height_increment = DistanceCalculation.positive_elevation_distance(current_step[-1], geopoint)
 
-            if lat_lon_distance + lat_lon_distance_increment <= max_distance and positive_height_difference + height_increment <= max_elevation:
+            if horizontal_distance + horizontal_distance_increment <= max_horizontal_distance and positive_height_difference + positive_height_increment <= max_elevation:
                 current_step.append(geopoint)
-                lat_lon_distance += lat_lon_distance_increment
-                positive_height_difference += height_increment 
+                horizontal_distance += horizontal_distance_increment
+                positive_height_difference += positive_height_increment 
             else:
                 self.stepped_route.append(current_step)
-                self.length += lat_lon_distance
+                self.length += horizontal_distance
                 self.positive_height_difference += positive_height_difference
                 current_step = [self.stepped_route[-1][-1], geopoint]
-                lat_lon_distance = lat_lon_distance_increment
-                positive_height_difference = height_increment
+                horizontal_distance = horizontal_distance_increment
+                positive_height_difference = positive_height_increment
         
         if self.stepped_route != []:
             if current_step != self.stepped_route[-1]:
@@ -293,6 +292,6 @@ class TripDescriptor(BaseModel):
             self.stepped_route.append(current_step)
 
         try:
-            self.__check_consistency_number_of_days_number_of_steps()
+            self.__check_consistency_duration_number_of_steps()
         except Exception as e:
             return e

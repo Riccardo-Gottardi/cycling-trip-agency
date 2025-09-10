@@ -3,8 +3,8 @@ from pydantic import BaseModel
 
 class PerformanceDescriptor(BaseModel):
     """Description of the user cycling performance"""
-    kilometre_per_day: int = 0 #Field(default=0, description="the maximum amount of kilometres the user is able to ride in a day")
-    positive_height_difference_per_day: int = 0 #Field(default=0, description="the maximum difference of height in meter the user is able do in a day")
+    kilometre_per_day: int = 0
+    positive_height_difference_per_day: int = 0
 
     def get_kilometre_per_day(self) -> int:
         return self.kilometre_per_day
@@ -12,7 +12,8 @@ class PerformanceDescriptor(BaseModel):
     def get_positive_height_difference_per_day(self) -> int:
         return self.positive_height_difference_per_day
 
-    def get_class_description(self) -> str:
+    @classmethod
+    def get_class_description(cls) -> str:
         """Get a string description of the class"""
         return f"""## PerformanceDescriptor:
 - kilometre_per_day: int = 0
@@ -71,3 +72,5 @@ class PerformanceDescriptor(BaseModel):
                 self.__set_positive_height_difference_per_day(positive_height_difference_per_day)
             except Exception as e:
                 return e
+
+        return None

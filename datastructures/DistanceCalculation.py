@@ -12,19 +12,27 @@ class DistanceCalculation:
 
         mean_latitude = (lat_a + lat_b) / 2
 
-        K1 = 111.13209 - 0.56605 * math.cos(2 * mean_latitude) + 0.00120 * math.cos(4 * mean_latitude)
-        K2 = 111.41513 * math.cos(mean_latitude) - 0.09455 * math.cos(3 * mean_latitude) + 0.00012 * math.cos(5 * mean_latitude)
+        k1 = 111.13209 - 0.56605 * math.cos(2 * mean_latitude) + 0.00120 * math.cos(4 * mean_latitude)
+        k2 = 111.41513 * math.cos(mean_latitude) - 0.09455 * math.cos(3 * mean_latitude) + 0.00012 * math.cos(5 * mean_latitude)
 
-        D = math.sqrt(math.pow(K1 * difference_in_lat, 2) + math.pow(K2 * difference_in_lon, 2))
+        d = math.sqrt(math.pow(k1 * difference_in_lat, 2) + math.pow(k2 * difference_in_lon, 2))
         
-        return D * 1000
+        return d
     
     @classmethod
     def euclidean_distance(cls, a: list[float], b: list[float]) -> float:
-        """Calculate the euclidean distance between two geographical points"""
+        """Calculate the Euclidean distance between two geographical points"""
         squared_distances_sum = 0
 
         for i in range(len(a)):
             squared_distances_sum += (a[i] - b[i])**2
 
         return math.sqrt(squared_distances_sum)
+
+    @classmethod
+    def positive_elevation_distance(cls, a: list[float], b: list[float]) -> float:
+        """Calculate the positive elevation distance between two geographical points"""
+        if a[2] < b[2]:
+            return abs(a[2] - b[2])
+        else:
+            return 0.0

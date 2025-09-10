@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
 
-class  PreferencesDescriptor(BaseModel):
+class  POIsDescriptor(BaseModel):
     """Preference of the user for the points of interest"""
     possible_amenity: set[str] = {"restaurant", "cafe", "bar", "fast_food", "pub", "tourist_information", "place_of_worship", "parking", "toilets", "bench", "drinking_water", "bicycle_parking", "bicycle_rental", "bicycle_repair_station"}
     possible_tourism: set[str] = {"museum", "gallery", "viewpoint", "zoo", "aquarium", "theme_park", "information", "attraction"}
@@ -46,7 +46,7 @@ class  PreferencesDescriptor(BaseModel):
     
     def get_class_description(self) -> str:
         """Get a string description of the class"""
-        return f"""## PreferencesDescriptor:
+        return f"""## POIsDescriptor:
 - amenity: dict | None = None
     - the list of amenities the user prefers
     - can be one or more of the following: {', '.join(self.possible_amenity)}
@@ -76,21 +76,21 @@ class  PreferencesDescriptor(BaseModel):
     def get_description(self) -> str:
         description = ""
 
-        if self.amenity:
+        if self.amenity is not None:
             description += f"Amenities: {', '.join([amenity for amenity in self.amenity])}\n"
-        if self.tourism:
+        if self.tourism is not None:
             description += f"Tourism: {', '.join([tourism for tourism in self.tourism])}\n"
-        if self.historic:
+        if self.historic is not None:
             description += f"Historic: {', '.join([historic for historic in self.historic])}\n"
-        if self.building:
+        if self.building is not None:
             description += f"Building: {', '.join([building for building in self.building])}\n"
-        if self.natural:
+        if self.natural is not None:
             description += f"Natural: {', '.join([natural for natural in self.natural])}\n"
-        if self.water:
+        if self.water is not None:
             description += f"Water: {', '.join([water for water in self.water])}\n"
-        if self.leisure:
+        if self.leisure is not None:
             description += f"Leisure: {', '.join([leisure for leisure in self.leisure])}\n"
-        if self.man_made:
+        if self.man_made is not None:
             description += f"Man-made: {', '.join([man_made for man_made in self.man_made])}\n"
 
         if description == "":
@@ -98,45 +98,45 @@ class  PreferencesDescriptor(BaseModel):
         
         return description
 
-    def __set_amenity(self, type: str, detail: list[str]):
-        if type not in self.possible_amenity:
-            raise Exception(f"Invalid amenity type: {type}. Possible types are: {', '.join(self.possible_amenity)}")
-        self.amenity = {type: detail}
+    def __set_amenity(self, p_type: str, detail: list[str]):
+        if p_type not in self.possible_amenity:
+            raise Exception(f"Invalid amenity type: {p_type}. Possible p_types are: {', '.join(self.possible_amenity)}")
+        self.amenity = {p_type: detail}
 
-    def __set_tourism(self, type: str, detail: list[str]):
-        if type not in self.possible_tourism:
-            raise Exception(f"Invalid tourism type: {type}. Possible types are: {', '.join(self.possible_tourism)}")
-        self.tourism = {type: detail}
+    def __set_tourism(self, p_type : str, detail: list[str]):
+        if{p_type}not in self.possible_tourism:
+            raise Exception(f"Invalid tourism type: {p_type}. Possible p_types are: {', '.join(self.possible_tourism)}")
+        self.tourism = {p_type: detail}
 
-    def __set_historic(self, type: str, detail: list[str]):
-        if type not in self.possible_historic:
-            raise Exception(f"Invalid historic type: {type}. Possible types are: {', '.join(self.possible_historic)}")
-        self.historic = {type: detail}
+    def __set_historic(self, p_type : str, detail: list[str]):
+        if{p_type}not in self.possible_historic:
+            raise Exception(f"Invalid historic type: {p_type}. Possible p_types are: {', '.join(self.possible_historic)}")
+        self.historic = {p_type: detail}
 
-    def __set_building(self, type: str, detail: list[str]):
-        if type not in self.possible_building:
-            raise Exception(f"Invalid building type: {type}. Possible types are: {', '.join(self.possible_building)}")
-        self.building = {type: detail}
+    def __set_building(self, p_type : str, detail: list[str]):
+        if{p_type}not in self.possible_building:
+            raise Exception(f"Invalid building type: {p_type}. Possible p_types are: {', '.join(self.possible_building)}")
+        self.building = {p_type: detail}
 
-    def __set_natural(self, type: str, detail: list[str]):
-        if type not in self.possible_natural:
-            raise Exception(f"Invalid natural type: {type}. Possible types are: {', '.join(self.possible_natural)}")
-        self.natural = {type: detail}
+    def __set_natural(self, p_type : str, detail: list[str]):
+        if{p_type}not in self.possible_natural:
+            raise Exception(f"Invalid natural type: {p_type}. Possible p_types are: {', '.join(self.possible_natural)}")
+        self.natural = {p_type: detail}
 
-    def __set_water(self, type: str, detail: list[str]):
-        if type not in self.possible_water:
-            raise Exception(f"Invalid water type: {type}. Possible types are: {', '.join(self.possible_water)}")
-        self.water = {type: detail}
+    def __set_water(self, p_type : str, detail: list[str]):
+        if{p_type}not in self.possible_water:
+            raise Exception(f"Invalid water type: {p_type}. Possible p_types are: {', '.join(self.possible_water)}")
+        self.water = {p_type: detail}
 
-    def __set_leisure(self, type: str, detail: list[str]) -> None | str:
-        if type not in self.possible_leisure:
-            raise Exception(f"Invalid leisure type: {type}. Possible types are: {', '.join(self.possible_leisure)}")
-        self.leisure = {type: detail}
+    def __set_leisure(self, p_type : str, detail: list[str]) -> None | str:
+        if{p_type}not in self.possible_leisure:
+            raise Exception(f"Invalid leisure type: {p_type}. Possible p_types are: {', '.join(self.possible_leisure)}")
+        self.leisure = {p_type: detail}
 
-    def __set_man_made(self, type: str, detail: list[str]) -> None | str:
-        if type not in self.possible_man_made:
-            raise Exception(f"Invalid man-made type: {type}. Possible types are: {', '.join(self.possible_man_made)}")
-        self.man_made = {type: detail}
+    def __set_man_made(self, p_type : str, detail: list[str]) -> None | str:
+        if{p_type}not in self.possible_man_made:
+            raise Exception(f"Invalid man-made type: {p_type}. Possible p_types are: {', '.join(self.possible_man_made)}")
+        self.man_made = {p_type: detail}
 
     def fill(self, amenity: None | dict = None, tourism: None | dict = None, historic: None | dict = None, building: None | dict = None, natural: None | dict = None, water: None | dict = None, leisure: None | dict = None, man_made: None | dict = None) -> None | str:
         """Fill the preferences descriptor with the given things
@@ -150,11 +150,11 @@ class  PreferencesDescriptor(BaseModel):
             leisure (dict): A dictionary containing the leisure preferences to fill.
             man_made (dict): A dictionary containing the man-made preferences to fill.
         Raises:
-            ValueError: If the key is not a valid attribute of the PreferencesDescriptor class
+            ValueError: If the key is not a valid attribute of the POIsDescriptor class
         
         Examples:
             ```python
-            preferences = PreferencesDescriptor()
+            preferences = POIsDescriptor()
             preferences.fill(
                 amenity={"restaurant": ["Italian", "Chinese"]},
                 natural={"coastline": ["beach"]},
@@ -167,57 +167,57 @@ class  PreferencesDescriptor(BaseModel):
         """
         if amenity is not None:
             try:
-                for type, detail in amenity.items():
-                    self.__set_amenity(type, detail)
+                for p_type, detail in amenity.items():
+                    self.__set_amenity(p_type, detail)
             except Exception as e:
                 raise e
 
         if tourism is not None:
             try:
-                for type, detail in tourism.items():
-                    self.__set_tourism(type, detail)
+                for p_type, detail in tourism.items():
+                    self.__set_tourism(p_type, detail)
             except Exception as e:
                 raise e
 
         if historic is not None:
             try:
-                for type, detail in historic.items():
-                    self.__set_historic(type, detail)
+                for p_type, detail in historic.items():
+                    self.__set_historic(p_type, detail)
             except Exception as e:
                 raise e
 
         if building is not None:
             try:
-                for type, detail in building.items():
-                    self.__set_building(type, detail)
+                for p_type, detail in building.items():
+                    self.__set_building(p_type, detail)
             except Exception as e:
                 raise e
 
         if natural is not None:
             try:
-                for type, detail in natural.items():
-                    self.__set_natural(type, detail)
+                for p_type, detail in natural.items():
+                    self.__set_natural(p_type, detail)
             except Exception as e:
                 raise e
 
         if water is not None:
             try:
-                for type, detail in water.items():
-                    self.__set_water(type, detail)
+                for p_type, detail in water.items():
+                    self.__set_water(p_type, detail)
             except Exception as e:
                 raise e
 
         if leisure is not None:
             try:
-                for type, detail in leisure.items():
-                    self.__set_leisure(type, detail)
+                for p_type, detail in leisure.items():
+                    self.__set_leisure(p_type, detail)
             except Exception as e:
                 raise e
 
         if man_made is not None:
             try:
-                for type, detail in man_made.items():
-                    self.__set_man_made(type, detail)
+                for p_type, detail in man_made.items():
+                    self.__set_man_made(p_type, detail)
             except Exception as e:
                 raise e
 

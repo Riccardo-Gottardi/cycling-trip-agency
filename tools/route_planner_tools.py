@@ -1,10 +1,5 @@
-from datetime import date
-from enum import Enum
-
 from pydantic_ai import RunContext
-
 from datastructures.dependencies import MyDeps
-from datastructures.TripDescriptor import Place
 
 
 def say_to_the_user(question: str) -> str:
@@ -38,8 +33,8 @@ def get_trip_information(ctx: RunContext[MyDeps], trip_info: str) -> str | None:
             return ctx.deps.trip.get_bike_type()
         case "places":
             return str(ctx.deps.trip.get_places())
-        case "number_of_days":
-            return str(ctx.deps.trip.get_number_of_days())
+        case "duration":
+            return str(ctx.deps.trip.get_duration())
         case "dates":
             return str(ctx.deps.trip.get_dates())
         case "candidate_routes":
@@ -52,6 +47,9 @@ def get_trip_information(ctx: RunContext[MyDeps], trip_info: str) -> str | None:
             return str(ctx.deps.trip.get_length())
         case "positive_height_difference":
             return str(ctx.deps.trip.get_positive_height_difference())
+
+    return None
+
 
 def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
     """A tool to get an information about the user.
@@ -89,6 +87,8 @@ def get_user_information(ctx: RunContext[MyDeps], user_info: str) -> str | None:
             return str(ctx.deps.user.get_performance().get_positive_height_difference_per_day())
         case "additional_note":
             return str(ctx.deps.user.get_additional_note())
+
+    return None
         
 def get_recommendations(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to get the founded recommendations for the trip.
@@ -101,8 +101,10 @@ def get_recommendations(ctx: RunContext[MyDeps]) -> str | None:
         ```
     """
     recommendations = ctx.deps.recommendation.get_recommended_places()
-    if recommendations is not None or len(recommendations) > 0:
+    if len(recommendations) > 0:
         return "".join(f"{r}\n" for r in recommendations)
+    else:
+        return None
 
 def generate_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
     """A tool to plan the candidate routes for the trip.
@@ -133,6 +135,7 @@ def present_the_candidate_routes(ctx: RunContext[MyDeps]) -> str | None:
     if candidate_routes is not None:
         for idx, route in enumerate(candidate_routes):
             print(f"Route {idx + 1}: {route[0]}, {route[len(route)//2]}, {route[-1]}")
+        return None
     else:
         return "No candidate routes available."
     
@@ -194,6 +197,22 @@ def divide_the_route_in_steps(ctx: RunContext[MyDeps]):
         ```
     """
     try:
-        ctx.deps.trip.plan_steps(max_distance=ctx.deps.user.get_performance().get_kilometre_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
+        ctx.deps.trip.plan_steps(max_horizontal_distance=ctx.deps.user.get_performance().get_kilometre_per_day(), max_elevation=ctx.deps.user.get_performance().get_positive_height_difference_per_day())
     except Exception as e:
         return str(e)
+
+def present_the_stepped_route(ctx: RunContext[MyDeps]):
+    """Presents the stepped route for navigation or processing.
+    Returns:
+        - str: an error message if something went wrong.
+        - None: if everything went right.
+    Examples:
+        error = present_the_stepped_route()
+    """
+    stepped_route = ctx.deps.trip.get_stepped_route()
+    if stepped_route is not None:
+        for idx, route in enumerate(stepped_route):
+            print(f"Step {idx + 1}: {route[0]}, {route[len(route)//2]}, {route[-1]}")
+        return None
+    else:
+        return "No stepped route available."

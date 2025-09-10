@@ -10,7 +10,8 @@ class Recommendation(BaseModel):
     def get_recommended_places(self) -> list[Place]:
         return self.recommended_places
 
-    def __query_overpass(self, query: str, max_retries: int = 3) -> requests.Response: # pyright: ignore[reportReturnType]
+    @classmethod
+    def __query_overpass(cls, query: str, max_retries: int = 3) -> requests.Response: # pyright: ignore[reportReturnType]
         url = "https://overpass-api.de/api/interpreter"
 
         for i in range(max_retries):
@@ -19,10 +20,10 @@ class Recommendation(BaseModel):
                 response.raise_for_status()
                 return response
             except Exception as e:
-                if i == max_retries - 1:
-                    raise e
-                    
-                time.sleep(2**i + random.uniform(0, 1))
+                if i != max_retries - 1:
+                    time.sleep(2 ** i + random.uniform(0, 1))
+                    continue
+                raise e
 
     def __get_amenity_pois(self, search_center: list[float], search_radius: int, amenities: dict) -> list[Place]:
         lon, lat, _ = search_center
