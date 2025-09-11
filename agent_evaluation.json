@@ -229,7 +229,6 @@
     "24": {
         "message": "Cycling adventure: Latisana -> Precenicco -> Palazzolo dello Stella, 25km/day, 200m climbing, hybrid bike.",
         "info_collected": {
-            "bike_type": "hybrid",
             "places": [
                 "Latisana",
                 "Precenicco",

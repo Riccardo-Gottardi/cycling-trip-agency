@@ -1,0 +1,215 @@
+{
+    "1": {
+        "places": [
+            "Pordenone",
+            "Polcenigo",
+            "Caneva",
+            "Vittorio Veneto",
+            "Pordenone"
+        ],
+        "duration": 4,
+        "bike_type": "mtb",
+        "notes": "off-road could mean both mtb and gravel bike, it should have asked",
+        "followup_message": "Thanks for sharing your trip idea and that you prefer mountain biking (mtb) for this off-road adventure. To tailor the plan perfectly, could you tell me how many kilometers per day you feel comfortable cycling on such terrain? Also, what is your maximum positive height difference (climbing) per day that you can manage?"
+    },
+    "2": {
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000,
+        "bike_type": "mtb",
+        "note": "",
+        "followup_message": "Great! You plan to ride 50 km per day with an elevation gain of 1000 meters per day, using a mountain bike. Could you please tell me the places or route you want to include in this trip? For example, the starting point, destinations, and finishing point."
+    },
+    "3": {
+        "places": [
+            "Udine",
+            "Tarvisio"
+        ],
+        "bike_type": "road",
+        "note": "",
+        "followup_message": "Great choice! You're planning to ride your Giant Propel road bike from Udine to Tarvisio. How many kilometres would you like to cover per day on this trip?"
+    },
+    "4": {
+        "places": [
+            "Trieste",
+            "Gorizia"
+        ],
+        "note": "",
+        "followup_message": "Great choice! Riding from Trieste to Gorizia sounds like a lovely cycling trip. How many days are you planning to spend on this trip, and what type of bike do you plan to use (road, gravel, or MTB)? Also, how many kilometers per day do you feel comfortable riding, and what is your preferred amount of positive height difference per day?"
+    },
+    "5": {
+        "note": "",
+        "followup_message": "Thanks for sharing that you'd like to go to Zoppola. Could you please tell me where your starting point will be for this trip?"
+    },
+    "6": {
+        "note": "The agent just terminated the execution",
+        "followup_message": ""
+    },
+    "7": {
+        "places": [
+            "Udine",
+            "San daniele del friuli"
+        ],
+        "bike_type": "road",
+        "kilometre_per_day": "80",
+        "positive_height_difference_per_day": "1000",
+        "note": "",
+        "followup_message": "Thanks for sharing that! How many days do you plan to spend on this trip from Udine to San Daniele del Friuli? Also, do you have specific dates in mind for your trip?"
+    },
+    "8": {
+        "places": [
+            "Pordenone",
+            "Sacile"
+        ],
+        "bike_type": "road",
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'",
+        "followup_message": "Great! You're planning a bike trip from Pordenone to Sacile. Can you please tell me what type of bike you'll be using? For example, is it a road bike, gravel bike, or mountain bike?"
+    },
+    "9": {
+        "places": [
+            "Venice",
+            "Padova"
+        ],
+        "bike_type": null,
+        "kilometre_per_day": "48",
+        "positive_height_difference_per_day": "914",
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'",
+        "followup_message": "Thank you for sharing your plan. Just to confirm, when you say 30 miles per day, do you mean about 48 kilometers per day? And for 3000 feet of climbing, that's roughly 914 meters per day. Also, what type of bike will you be riding? (road, gravel, or mountain bike) Do you want the route to be directly from Venice to Padova, or would you like to include any specific places along the way?"
+    },
+    "10": {
+        "places": [
+            "Udine",
+            "Trieste"
+        ],
+        "duration": "5",
+        "kilometre_per_day": 60,
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'",
+        "followup_message": "Great! You want a 5-day cycling trip from Udine to Trieste. Could you tell me what type of bike you'll be using? For example, a road bike, gravel bike, or mountain bike? Also, how many kilometers per day do you feel comfortable cycling? And what about the positive height difference (climbing) per day you can handle?"
+    },
+    "11": {
+        "places": [
+            "Treviso",
+            "Belluno"
+        ],
+        "bike_type": "road",
+        "kilometre_per_day": 40,
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'",
+        "followup_message": "Great choice! Treviso to Belluno sounds like a wonderful route. Since you mentioned you're a beginner cyclist, could you tell me how many kilometers you feel comfortable riding in a day? Also, do you have any preference for the bike type, such as road, gravel, or mountain bike?"
+    },
+    "12": {
+        "duration": 6,
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you', it have memorized Dolomites as a place and since it have received an error from TripDescriptor it have responded with 'Thank you for the information! To plan your trip properly, I need to know both the starting point and the ending point of your trip in the Dolomites. Could you please specify those two places?'",
+        "followup_message": "Great! You've got both a road bike and a mountain bike, and you want to cycle through the Dolomites for 6 days. Do you have a preference on which bike you'd like to use for this trip — road bike or mountain bike? Also, could you share how many kilometers you feel comfortable cycling per day and the positive elevation gain you can handle daily?"
+    },
+    "13": {
+        "places": [
+            "Grado",
+            "Aquileia"
+        ],
+        "dates": [
+            "2023-09-16T05:00:00",
+            "2023-09-16T23:59:00"
+        ],
+        "note": "the test was executed the 11 september 2025 at the 00:48",
+        "followup_message": "Great! You plan to ride from Grado to Aquileia next weekend with an early morning departure. To tailor the route perfectly for you, could you please tell me what type of bike you'll be using? For example, road, gravel, or mountain bike?"
+    },
+    "14": {
+        "places": [
+            "Conegliano",
+            "Oderzo"
+        ],
+        "positive_height_difference_per_day": 100,
+        "note": "",
+        "followup_message": "Thanks for sharing that! Just to confirm, you want an easy, flat cycling route from Conegliano to Oderzo. Could you please tell me how many kilometers you would like to cycle per day? Also, what type of bike will you use? For example, road bike, gravel bike, or mountain bike."
+    },
+    "15": {
+        "places": [
+            "Palmanova",
+            "Cervignano"
+        ],
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'",
+        "followup_message": "Great! You and your 3 friends want to cycle from Palmanova to Cervignano with hotel accommodations. How many days do you plan to spend on this trip? Also, could you tell me what type of bike you'll be using (road, gravel, or mountain bike)?"
+    },
+    "16": {
+        "note": "",
+        "followup_message": "Great! You want to cycle from Spilimbergo to Maniago for sightseeing. Could you tell me what type of bike you will be using? Also, how many kilometers per day would you like to ride, and how much positive height difference (climbing) can you handle daily?"
+    },
+    "17": {
+        "note": "",
+        "followup_message": "Just to clarify, are you planning a cycling trip that includes Cividale del Friuli and you want me to recommend a good restaurant there? Also, could you please share more about your trip such as the bike type you plan to use, how many kilometers you want to cycle per day, the total duration, and any other places you want to visit?"
+    },
+    "18": {
+        "places": [
+            "Tolmezzo",
+            "Gemona"
+        ],
+        "bike_type": "mtb",
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000,
+        "note": "",
+        "followup_message": "Thanks for sharing that! You plan to cycle about 50 km per day with 1000 meters of elevation gain each day on your mountain bike, starting from Tolmezzo and ending in Gemona. How many days do you plan to spend on this trip? Also, do you have any preferred dates or a specific time frame for this trip?"
+    },
+    "19": {
+        "places": [
+            "Udine",
+            "Tarvisio"
+        ],
+        "bike_type": "gravel",
+        "note": "The agent haven't memorized the information immediately, it was stimulated with the phrase 'just continue with the information I provided to you'. It detected the name error and proposed a correct solution. was executed 3 times only the third one detected both the errors",
+        "followup_message": "Great! You want to cycle from Udina to Tarviso on your gravel bike. How many days do you plan to spend on this trip?"
+    },
+    "20": {
+        "places": [
+            "Pordenone",
+            "Aviano"
+        ],
+        "bike_type": "road",
+        "note": "",
+        "followup_message": "Great! You want to cycle from Pordenone to Aviano with a road bike. Now, could you tell me how many kilometers you are comfortable riding per day and the maximum positive height difference (climbing) you can handle in a day?"
+    },
+    "21": {
+        "places": [
+            "Monfalcone",
+            "Ronchi dei Legionari",
+            "Gradisca d'Isonzo"
+        ],
+        "bike_type": "road",
+        "kilometre_per_day": 40,
+        "positive_height_difference_per_day": 800,
+        "note": "",
+        "followup_message": "Thank you for the details! Just to confirm, you plan to cycle approximately 40 kilometers per day with a positive elevation gain of about 800 meters, using a road bike. You want to go through Monfalcone, Ronchi dei Legionari, and Gradisca d'Isonzo. Do you have a specific number of days or dates planned for this trip?"
+    },
+    "22": {
+        "places": [
+            "Lignano",
+            "Bibione"
+        ],
+        "kilometre_per_day": 60,
+        "note": "",
+        "followup_message": "Thank you for that information! Just to confirm, you mentioned two distances per day, 60 km and 40 km. Could you please clarify which one you would prefer for your daily riding distance? Or do you want to alternate days with different distances?"
+    },
+    "23": {
+        "places": [
+            "San Vito al Tagliamento",
+            "Casarsa della Delizia"
+        ],
+        "bike_type": "road",
+        "note": "",
+        "followup_message": "Thanks for sharing your route and bike type! Now, could you tell me about your daily riding capacity? How many kilometers can you comfortably cycle per day? Also, what is the maximum positive height difference (in meters) you can handle each day?"
+    },
+    "24": {
+        "places": [
+            "Latisana",
+            "Precenicco",
+            "Palazzolo dello Stella"
+        ],
+        "bike_type": "gravel",
+        "kilometre_per_day": 25,
+        "positive_height_difference_per_day": 200,
+        "note": "",
+        "followup_message": "Thanks for sharing your cycling adventure plan from Latisana through Precenicco to Palazzolo dello Stella with about 25 km per day and 200 m climbing on a hybrid bike. Just to confirm, by "hybrid bike" you mean a gravel bike for this trip, is that correct? Also, do you have any specific duration or total number of days planned for this trip?"
+    },
+    "25": {
+        "note": "correctly haven't catch any information, but the response does seem like it haven't catch the non-sense",
+        "followup_message": "Thanks for sharing! Just to confirm, you mentioned cycling 0 kilometers per day on a unicycle from 'nowhere' to 'everywhere.' Could you please clarify the distance you want to cover daily and the type of bike? Unicycle is quite unique! Also, could you specify the actual starting and ending locations or the places you want to go through?"
+    }
+}
