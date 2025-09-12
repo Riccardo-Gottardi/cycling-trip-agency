@@ -157,7 +157,7 @@ class  POIsDescriptor(BaseModel):
             preferences = POIsDescriptor()
             preferences.fill(
                 amenity={"restaurant": ["Italian", "Chinese"]},
-                natural={"coastline": ["beach"]},
+                natural={"coastline": []},
                 historic={"castles": ["Neuschwanstein"]},
                 building={"skyscrapers": ["Burj Khalifa"]},
                 leisure={"parks": ["Central Park"]},

@@ -55,8 +55,9 @@ def fill_pois_preferences(ctx: RunContext[MyDeps], poi_category: str, poi_prefer
         - poi_preference_detail (list[str]) : a list of details for the preference, e.g. ["Italian", "Chinese"]
     Examples:
         ```python
-        fill_user_preferences(poi_category="amenity", poi_preference_type="restaurant", poi_preference_detail=["Italian", "Chinese"])
-        fill_user_preferences(poi_category="water", poi_preference_type="lake", poi_preference_detail=["laghi di fusine"])
+        fill_pois_preferences(poi_category="amenity", poi_preference_type="restaurant", poi_preference_detail=["Italian", "Chinese"])
+        fill_pois_preferences(poi_category="amenity", poi_preference_type="cafe", poi_preference_detail=[""])
+        fill_pois_preferences(poi_category="water", poi_preference_type="lake", poi_preference_detail=["laghi di fusine"])
         ```
     """
     try:

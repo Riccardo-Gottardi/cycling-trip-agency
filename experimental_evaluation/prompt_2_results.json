@@ -1,0 +1,197 @@
+{
+    "1": {
+        "bike_type": "mtb",
+        "places": [
+            "Pordenone",
+            "Polcenigo",
+            "Caneva",
+            "Vittorio Veneto",
+            "Pordenone"
+        ],
+        "duration": 4,
+        "note": "The agent have asked for confirmation about the type of bike,  it was suggested to fill the descriptor by saying 'just save the information I provided'"
+    },
+    "2": {
+        "bike_type": "mtb",
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000,
+        "note": ""
+    },
+    "3": {
+        "bike_type": "road",
+        "places": [
+            "Udine",
+            "Tarvisio"
+        ],
+        "note": ""
+    },
+    "4": {
+        "places": [
+            "Trieste",
+            "Gorizia"
+        ],
+        "note": ""
+    },
+    "5": {
+        "places": [
+            "Zoppola"
+        ],
+        "note": ""
+    },
+    "6": {
+        "note": "Ha terminato l'esecuzione"
+    },
+    "7": {
+        "bike_type": "road",
+        "places": [
+            "Udine",
+            "San Daniele del Friuli"
+        ],
+        "kilometre_per_day": 80,
+        "positive_height_difference_per_day": 1000,
+        "note": ""
+    },
+    "8": {
+        "bike_type": "unknown",
+        "places": [
+            "Pordenone",
+            "Sacile"
+        ],
+        "note": ""
+    },
+    "9": {
+        "places": [
+            "Venice",
+            "Padova"
+        ],
+        "kilometre_per_day": 48,
+        "positive_height_difference_per_day": 914,
+        "note": ""
+    },
+    "10": {
+        "places": [
+            "Udine",
+            "Trieste"
+        ],
+        "duration": 5,
+        "note": ""
+    },
+    "11": {
+        "places": [
+            "Treviso",
+            "Belluno"
+        ],
+        "note": "The agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information I provided'"
+    },
+    "12": {
+        "places": [
+            "Dolomites"
+        ],
+        "duration": 6,
+        "note": "the agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information i provided'"
+    },
+    "13": {
+        "places": [
+            "Grado",
+            "Aquileia"
+        ],
+        "note": "the agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information i provided'"
+    },
+    "14": {
+        "places": [
+            "Conegliano",
+            "Oderzo"
+        ],
+        "note": ""
+    },
+    "15": {
+        "places": [
+            "Palmanova",
+            "Cervignano"
+        ],
+        "note": ""
+    },
+    "16": {
+        "places": [
+            "Spilimbergo",
+            "Maniago"
+        ],
+        "note": ""
+    },
+    "17": {
+        "note": "Enter a loop"
+    },
+    "18": {
+        "bike_type": "mtb",
+        "places": [
+            "Tolmezzo",
+            "Gemona"
+        ],
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000,
+        "note": ""
+    },
+    "19": {
+        "bike_type": "gravel",
+        "places": [
+            "Udina",
+            "Tarviso"
+        ],
+        "note": ""
+    },
+    "20": {
+        "bike_type": "road",
+        "places": [
+            "Pordenone",
+            "Aviano"
+        ],
+        "note": ""
+    },
+    "21": {
+        "bike_type": "road",
+        "places": [
+            "Monfalcone",
+            "Ronchi dei Legionari",
+            "Gradisca d'isonzo"
+        ],
+        "kilometre_per_day": 40,
+        "positive_height_difference_per_day": 800,
+        "note": ""
+    },
+    "22": {
+        "places": [
+            "Lignano",
+            "Bibione"
+        ],
+        "kilometre_per_day": 40,
+        "note": ""
+    },
+    "23": {
+        "bike_type": "road",
+        "places": [
+            "San Vito al Tagliamento",
+            "Casarsa della Delizia"
+        ],
+        "note": ""
+    },
+    "24": {
+        "bike_type": "gravel",
+        "places": [
+            "Latisana",
+            "Precenicco",
+            "Palazzo dello Stella"
+        ],
+        "kilometre_per_day": 25,
+        "positive_height_difference_per_day": 200,
+        "note": ""
+    },
+    "25": {
+        "bike_type": "unicycle",
+        "places": [
+            "nowere",
+            "everywhere"
+        ],
+        "kilometre_per_day": 0,
+        "note": ""
+    }
+}

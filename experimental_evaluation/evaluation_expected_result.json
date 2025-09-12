@@ -1,0 +1,152 @@
+{
+    "1": {
+        "places": [
+            "Pordenone",
+            "Polcenigo",
+            "Caneva",
+            "Vittorio Veneto",
+            "Pordenone"
+        ],
+        "duration": "4"
+    },
+    "2": {
+        "bike_type": "mtb",
+        "kilometre_per_day": "50",
+        "positive_height_difference_per_day": "1000"
+    },
+    "3": {
+        "bike_type": "road",
+        "places": [
+            "Udine",
+            "Tarvisio"
+        ]
+    },
+    "4": {
+        "places": [
+            "Trieste",
+            "Gorizia"
+        ]
+    },
+    "5": {
+    },
+    "6": {
+    },
+    "7": {
+        "bike_type": "road",
+        "places": [
+            "Udine",
+            "San daniele del friuli"
+        ],
+        "kilometre_per_day": "80",
+        "positive_height_difference_per_day": "1000"
+    },
+    "8": {
+        "places": [
+            "Pordenone",
+            "Sacile"
+        ]
+    },
+    "9": {
+        "places": [
+            "Venice",
+            "Padova"
+        ],
+        "kilometre_per_day": "48.3",
+        "positive_height_difference_per_day": "914"
+    },
+    "10": {
+        "places": [
+            "Udine",
+            "Trieste"
+        ],
+        "duration": "5"
+    },
+    "11": {
+        "places": [
+            "Treviso",
+            "Belluno"
+        ]
+    },
+    "12": {
+        "duration": "6"
+    },
+    "13": {
+        "places": [
+            "Grado",
+            "Aquileia"
+        ]
+    },
+    "14": {
+        "places": [
+            "Conegliano",
+            "Oderzo"
+        ]
+    },
+    "15": {
+        "places": [
+            "Palmanova",
+            "Cervignano"
+        ]
+    },
+    "16": {
+    },
+    "17": {
+    },
+    "18": {
+        "bike_type": "mtb",
+        "places": [
+            "Tolmezzo",
+            "Gemona"
+        ],
+        "kilometre_per_day": "50",
+        "positive_height_difference_per_day": "1000"
+    },
+    "19": {
+        "bike_type": "gravel",
+        "places": [
+            "Udine",
+            "Tarvisio"
+        ]
+    },
+    "20": {
+        "bike_type": "road",
+        "places": [
+            "Pordenone",
+            "Aviano"
+        ]
+    },
+    "21": {
+        "bike_type": "road",
+        "places": [
+            "Monfalcone",
+            "Ronchi dei Legionari",
+            "Gradisca d'Isonzo"
+        ],
+        "kilometre_per_day": "40",
+        "positive_height_difference_per_day": "800"
+    },
+    "22": {
+        "places": [
+            "Lignano",
+            "Bibione"
+        ]
+    },
+    "23": {
+        "bike_type": "road",
+        "places": [
+            "San Vito al Tagliamento",
+            "Casarsa della Delizia"
+        ]
+    },
+    "24": {
+        "places": [
+            "Latisana",
+            "Precenicco",
+            "Palazzolo dello Stella"
+        ],
+        "kilometre_per_day": "25",
+        "positive_height_difference_per_day": "200"
+    },
+    "25": {
+    }
+}
