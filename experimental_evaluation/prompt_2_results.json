@@ -8,38 +8,32 @@
             "Vittorio Veneto",
             "Pordenone"
         ],
-        "duration": 4,
-        "note": "The agent have asked for confirmation about the type of bike,  it was suggested to fill the descriptor by saying 'just save the information I provided'"
+        "duration": 3
     },
     "2": {
         "bike_type": "mtb",
         "kilometre_per_day": 50,
-        "positive_height_difference_per_day": 1000,
-        "note": ""
+        "positive_height_difference_per_day": 1000
     },
     "3": {
         "bike_type": "road",
         "places": [
             "Udine",
             "Tarvisio"
-        ],
-        "note": ""
+        ]
     },
     "4": {
         "places": [
             "Trieste",
             "Gorizia"
-        ],
-        "note": ""
+        ]
     },
     "5": {
         "places": [
             "Zoppola"
-        ],
-        "note": ""
+        ]
     },
     "6": {
-        "note": "Ha terminato l'esecuzione"
     },
     "7": {
         "bike_type": "road",
@@ -48,16 +42,13 @@
             "San Daniele del Friuli"
         ],
         "kilometre_per_day": 80,
-        "positive_height_difference_per_day": 1000,
-        "note": ""
+        "positive_height_difference_per_day": 1000
     },
     "8": {
-        "bike_type": "unknown",
         "places": [
             "Pordenone",
             "Sacile"
-        ],
-        "note": ""
+        ]
     },
     "9": {
         "places": [
@@ -65,61 +56,63 @@
             "Padova"
         ],
         "kilometre_per_day": 48,
-        "positive_height_difference_per_day": 914,
-        "note": ""
+        "positive_height_difference_per_day": 914
     },
     "10": {
         "places": [
             "Udine",
             "Trieste"
         ],
-        "duration": 5,
-        "note": ""
+        "duration": 5
     },
     "11": {
         "places": [
             "Treviso",
             "Belluno"
-        ],
-        "note": "The agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information I provided'"
+        ]
     },
     "12": {
         "places": [
             "Dolomites"
         ],
-        "duration": 6,
-        "note": "the agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information i provided'"
+        "duration": 6
     },
     "13": {
         "places": [
             "Grado",
             "Aquileia"
         ],
-        "note": "the agent have asked for additional information, but it was 'forced' to save the current information it has with the phrase 'just save the information i provided'"
+        "dates": "next weekend"
     },
     "14": {
         "places": [
             "Conegliano",
             "Oderzo"
         ],
-        "note": ""
+        "positive_height_difference_per_day": 0
     },
     "15": {
         "places": [
             "Palmanova",
             "Cervignano"
-        ],
-        "note": ""
+        ]
     },
     "16": {
         "places": [
             "Spilimbergo",
             "Maniago"
-        ],
-        "note": ""
+        ]
     },
     "17": {
-        "note": "Enter a loop"
+        "preference": [
+            {
+                "poi_category": "amenity",
+                "poi_preference_type": "restaurant",
+                "poi_preference_detail": [
+                    "Cividale del friuli"
+                ]
+            }
+        ]
     },
     "18": {
         "bike_type": "mtb",
@@ -128,24 +121,21 @@
             "Gemona"
         ],
         "kilometre_per_day": 50,
-        "positive_height_difference_per_day": 1000,
-        "note": ""
+        "positive_height_difference_per_day": 1000
     },
     "19": {
         "bike_type": "gravel",
         "places": [
             "Udina",
             "Tarviso"
-        ],
-        "note": ""
+        ]
     },
     "20": {
         "bike_type": "road",
         "places": [
             "Pordenone",
             "Aviano"
-        ],
-        "note": ""
+        ]
     },
     "21": {
         "bike_type": "road",
@@ -155,24 +145,21 @@
             "Gradisca d'isonzo"
         ],
         "kilometre_per_day": 40,
-        "positive_height_difference_per_day": 800,
-        "note": ""
+        "positive_height_difference_per_day": 800
     },
     "22": {
         "places": [
             "Lignano",
             "Bibione"
         ],
-        "kilometre_per_day": 40,
-        "note": ""
+        "kilometre_per_day": 60
     },
     "23": {
         "bike_type": "road",
         "places": [
             "San Vito al Tagliamento",
             "Casarsa della Delizia"
-        ],
-        "note": ""
+        ]
     },
     "24": {
         "bike_type": "gravel",
@@ -182,8 +169,7 @@
             "Palazzo dello Stella"
         ],
         "kilometre_per_day": 25,
-        "positive_height_difference_per_day": 200,
-        "note": ""
+        "positive_height_difference_per_day": 200
     },
     "25": {
         "bike_type": "unicycle",
@@ -191,7 +177,49 @@
             "nowere",
             "everywhere"
         ],
-        "kilometre_per_day": 0,
-        "note": ""
+        "kilometre_per_day": 0
+    },
+    "26": {
+        "places": [
+            "Palmanova",
+            "Gorizia",
+            "Grado",
+            "Palmanova"
+        ]
+    },
+    "27": {
+        "kilometre_per_day": 100,
+        "preference": [
+            {
+                "poi_category": "water",
+                "poi_preference_type": "lake",
+                "poi_preference_detail": [
+                    ""
+                ]
+            }
+        ]
+    },
+    "28": {
+        "bike_type": "gravel",
+        "places": [
+            "Tarvisio",
+            "Gemona"
+        ]
+    },
+    "29": {
+        "bike_type": "gravel",
+        "places": [
+            "Trieste",
+            "Tarvisio"
+        ]
+    },
+    "30": {
+        "place": [
+            "Dardago",
+            "Tarvisio"
+        ],
+        "dates": [
+            "2024-09-03"
+        ]
     }
 }

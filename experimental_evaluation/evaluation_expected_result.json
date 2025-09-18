@@ -1,5 +1,6 @@
 {
     "1": {
+        "bike_type": "mtb",
         "places": [
             "Pordenone",
             "Polcenigo",
@@ -7,12 +8,12 @@
             "Vittorio Veneto",
             "Pordenone"
         ],
-        "duration": "4"
+        "duration": 3
     },
     "2": {
         "bike_type": "mtb",
-        "kilometre_per_day": "50",
-        "positive_height_difference_per_day": "1000"
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000
     },
     "3": {
         "bike_type": "road",
@@ -37,8 +38,8 @@
             "Udine",
             "San daniele del friuli"
         ],
-        "kilometre_per_day": "80",
-        "positive_height_difference_per_day": "1000"
+        "kilometre_per_day": 80,
+        "positive_height_difference_per_day": 1000
     },
     "8": {
         "places": [
@@ -51,15 +52,15 @@
             "Venice",
             "Padova"
         ],
-        "kilometre_per_day": "48.3",
-        "positive_height_difference_per_day": "914"
+        "kilometre_per_day": 48.3,
+        "positive_height_difference_per_day": 914
     },
     "10": {
         "places": [
             "Udine",
             "Trieste"
         ],
-        "duration": "5"
+        "duration": 5
     },
     "11": {
         "places": [
@@ -68,7 +69,7 @@
         ]
     },
     "12": {
-        "duration": "6"
+        "duration": 6
     },
     "13": {
         "places": [
@@ -89,8 +90,21 @@
         ]
     },
     "16": {
+        "places": [
+            "Spilimbergo",
+            "Maniago"
+        ]
     },
     "17": {
+        "preference": [
+            {
+                "poi_category": "amenity",
+                "poi_preference_type": "restaurant",
+                "poi_preference_detail": [
+                    "Cividale del Friuli"
+                ]
+            }
+        ]
     },
     "18": {
         "bike_type": "mtb",
@@ -98,8 +112,8 @@
             "Tolmezzo",
             "Gemona"
         ],
-        "kilometre_per_day": "50",
-        "positive_height_difference_per_day": "1000"
+        "kilometre_per_day": 50,
+        "positive_height_difference_per_day": 1000
     },
     "19": {
         "bike_type": "gravel",
@@ -122,8 +136,8 @@
             "Ronchi dei Legionari",
             "Gradisca d'Isonzo"
         ],
-        "kilometre_per_day": "40",
-        "positive_height_difference_per_day": "800"
+        "kilometre_per_day": 40,
+        "positive_height_difference_per_day": 800
     },
     "22": {
         "places": [
@@ -139,14 +153,58 @@
         ]
     },
     "24": {
+        "bike_type": "gravel",
         "places": [
             "Latisana",
             "Precenicco",
             "Palazzolo dello Stella"
         ],
-        "kilometre_per_day": "25",
-        "positive_height_difference_per_day": "200"
+        "kilometre_per_day": 25,
+        "positive_height_difference_per_day": 200
     },
     "25": {
+    },
+    "26": {
+        "places": [
+            "Palmanova",
+            "Gorizia",
+            "Grado",
+            "Palmanova"
+        ]
+    },
+    "27": {
+        "kilometre_per_day": 100,
+        "preference": [
+            {
+                "poi_category": "water",
+                "poi_preference_type": "lake",
+                "poi_preference_detail": [
+                    ""
+                ]
+            }
+        ]
+    },
+    "28": {
+        "bike_type": "gravel",
+        "places": [
+            "Tarvisio",
+            "Gemona"
+        ]
+    },
+    "29": {
+        "bike_type": "gravel",
+        "places": [
+            "Trieste",
+            "Tarvisio"
+        ]
+    },
+    "30": {
+        "place": [
+            "Dardago",
+            "Tarvisio"
+        ],
+        "dates": [
+            "2024-09-03"
+        ]
     }
 }

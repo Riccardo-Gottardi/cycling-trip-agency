@@ -12,6 +12,7 @@ load_dotenv()
 
 logfire.configure(send_to_logfire="if-token-present")
 logfire.instrument_pydantic_ai()
+logfire.instrument_requests()
 Agent.instrument_all()
 
 from crew.route_planner_agent import route_planner

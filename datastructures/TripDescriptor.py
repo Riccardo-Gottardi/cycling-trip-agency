@@ -57,7 +57,7 @@ class TripDescriptor(BaseModel):
         return self.candidate_routes
     
     def get_selected_route(self) -> int | None:
-        return self.selected_route
+        return self.selected_route + 1
 
     def get_stepped_route(self) -> list[list[list[float]]] | None:
         return self.stepped_route
@@ -109,7 +109,7 @@ class TripDescriptor(BaseModel):
         if self.candidate_routes:
             description += f" Number of candidate routes: {len(self.candidate_routes)}. "
         if self.selected_route:
-            description += f" Selected route index: {self.selected_route}. "
+            description += f" Selected route index: {self.selected_route + 1}. "
         if self.stepped_route:
             description += f" Number of steps in the route: {len(self.stepped_route)}. "
         if self.length:
@@ -147,8 +147,8 @@ class TripDescriptor(BaseModel):
 
     def __set_selected_route(self, selected_route: int):
         if self.candidate_routes is None: raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nBefore selecting one of the candidate routes they must be created, please fill the route descriptor with places first\n")
-        if not 0 <= selected_route < len(self.candidate_routes): raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nThe given selected_route must be between 0 and {len(self.candidate_routes)}\n{selected_route} was provided")
-        self.selected_route = selected_route
+        if not 0 < selected_route <= len(self.candidate_routes): raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nThe given selected_route must be between 1 and {len(self.candidate_routes)}\n{selected_route} was provided")
+        self.selected_route = selected_route - 1
 
     def fill(self, bike_type: None | str = None, places: None | list[str] = None, duration: None | int = None, dates: None | list[str] = None, selected_route: None | int = None):
         """Fill the TripDescriptor with the given info
@@ -208,7 +208,7 @@ class TripDescriptor(BaseModel):
                 raise e
 
     def __correct_eventual_inconsistency_between_dates_duration(self) -> None:
-        if self.dates is not None and self.duration is not None:
+        if self.dates is not None and len(self.dates) > 1 and self.duration is not None:
             if (self.dates[1] - self.dates[0]).days + 1 != self.duration:
                 self.dates[1] = self.dates[0] + timedelta(days=self.duration - 1)
 

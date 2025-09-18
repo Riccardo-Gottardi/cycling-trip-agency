@@ -8,38 +8,32 @@
             "Vittorio Veneto",
             "Pordenone"
         ],
-        "duration": 3,
-        "note": ""
+        "duration": 3
     },
     "2": {
         "bike_type": "mtb",
         "kilometre_per_day": 50,
         "positive_height_difference_per_day": 1000,
-        "note": ""
     },
     "3": {
         "bike_type": "road",
         "places": [
             "Udine",
             "Tarvisio"
-        ],
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        ]
     },
     "4": {
         "places": [
             "Trieste",
             "Gorizia"
-        ],
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        ]
     },
     "5": {
         "places": [
             "Zoppola"
-        ],
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        ]
     },
     "6": {
-        "note": "Ha terminato l'esecuzione"
     },
     "7": {
         "bike_type": "road",
@@ -48,16 +42,14 @@
             "San Daniele del Friuli"
         ],
         "kilometre_per_day": 80,
-        "positive_height_difference_per_day": 1000,
-        "note": ""
+        "positive_height_difference_per_day": 1000
     },
     "8": {
         "bike_type": "unknown",
         "places": [
             "Pordenone",
             "Sacile"
-        ],
-        "note": ""
+        ]
     },
     "9": {
         "places": [
@@ -65,32 +57,28 @@
             "Padova"
         ],
         "kilometre_per_day": 48,
-        "positive_height_difference_per_day": 914,
-        "note": ""
+        "positive_height_difference_per_day": 914
     },
     "10": {
         "places": [
             "Udine",
             "Trieste"
         ],
-        "duration": 5,
-        "note": ""
+        "duration": 5
     },
     "11": {
         "places": [
             "Treviso",
             "Belluno"
         ],
-        "kilometre_per_day": 20,
-        "note": ""
+        "kilometre_per_day": 20
     },
     "12": {
         "bike_type": "road",
         "places": [
             "Dolomites"
         ],
-        "duration": 6,
-        "note": ""
+        "duration": 6
     },
     "13": {
         "places": [
@@ -100,38 +88,33 @@
         "dates": [
             "2024-06-01",
             "2024-06-02"
-        ],
-        "note": ""
+        ]
     },
     "14": {
         "places": [
             "Conegliano",
             "Oderzo"
         ],
-        "positive_height_difference_per_day": 0,
-        "note": ""
+        "positive_height_difference_per_day": 0
     },
     "15": {
         "places": [
             "Palmanova",
             "Cervignano"
         ],
-        "additional_note": "Traveling with 3 friends, need hotel accommodations.",
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        "additional_note": "Traveling with 3 friends, need hotel accommodations."
     },
     "16": {
         "places": [
             "Spilimbergo",
             "Maniago"
         ],
-        "additional_note": "Trip from Spilimbergo to Maniago for sightseeing.",
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        "additional_note": "Trip from Spilimbergo to Maniago for sightseeing."
     },
     "17": {
         "places": [
             "Cividale del Friuli"
-        ],
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        ]
     },
     "18": {
         "bike_type": "mtb",
@@ -140,24 +123,21 @@
             "Gemona"
         ],
         "kilometre_per_day": 50,
-        "positive_height_difference_per_day": 1000,
-        "note": ""
+        "positive_height_difference_per_day": 1000
     },
     "19": {
         "bike_type": "gravel",
         "places": [
             "Udina",
             "Tarviso"
-        ],
-        "note": ""
+        ]
     },
     "20": {
         "bike_type": "road",
         "places": [
             "Pordenone",
             "Aviano"
-        ],
-        "note": ""
+        ]
     },
     "21": {
         "bike_type": "road",
@@ -167,24 +147,21 @@
             "Gradisca d'isonzo"
         ],
         "kilometre_per_day": 40,
-        "positive_height_difference_per_day": 800,
-        "note": ""
+        "positive_height_difference_per_day": 800
     },
     "22": {
         "places": [
             "Lignano",
             "Bibione"
         ],
-        "kilometre_per_day": 40,
-        "note": "The agent asked for additional information, it was suggested to save the current information with the message 'just save the information provided'"
+        "kilometre_per_day": 40
     },
     "23": {
         "bike_type": "road",
         "places": [
             "San Vito al Tagliamento",
             "Casarsa della Delizia"
-        ],
-        "note": ""
+        ]
     },
     "24": {
         "bike_type": "gravel",
@@ -194,12 +171,44 @@
             "Palazzo dello Stella"
         ],
         "kilometre_per_day": 25,
-        "positive_height_difference_per_day": 200,
-        "note": ""
+        "positive_height_difference_per_day": 200
     },
     "25": {
         "bike_type": "unicycle",
-        "kilometre_per_day": 0,
-        "note": ""
+        "kilometre_per_day": 0
+    },
+    "26": {
+        "places": [
+            "Palmanova",
+            "Gorizia",
+            "Grado"
+        ]
+    },
+    "27": {
+        "kilometre_per_day": 100,
+        "additional_note": "Enjoys visiting lakes during trips"
+    },
+    "28": {
+        "bike_type": "gravel",
+        "places": [
+            "Tarvisio",
+            "Gemona"
+        ]
+    },
+    "29": {
+        "bike_type": "gravel",
+        "places": [
+            "Trieste",
+            "Tarvisio"
+        ]
+    },
+    "30": {
+        "places": [
+            "Dardago",
+            "Tarvisio"
+        ],
+        "dates": [
+            "2024-09-03"
+        ]
     }
 }

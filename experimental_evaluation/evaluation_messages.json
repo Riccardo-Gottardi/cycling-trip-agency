@@ -98,5 +98,25 @@
     "25": {
         "message": "I want to cycle exactly 0 kilometers per day from nowhere to everywhere on my unicycle.",
         "note": "Testing nonsensical input - should extract nothing"
+    },
+    "26": {
+        "message": "I want to make a ring trip, it will start in Palmanova and go through Gorizia and Grado.",
+        "note": ""
+    },
+    "27": {
+        "message": "I want to cycle 100km per day. I really enjoy visiting lakes during my trips",
+        "note": "Preference extraction"
+    },
+    "28": {
+        "message": "I would like to see Gemona, from Tarvisio. At home I have a giant propel, but for the trip I have rented a specialized crux",
+        "note": ""
+    },
+    "29": {
+        "message": "I have my giant propel with mounted a beautiful set of gravel tire. I'll use it to go from Trieste to Tarvisio",
+        "note": ""
+    },
+    "30": {
+        "message": "On the third of september I will go to Tarvisio with my bike (I'm from Dardago)",
+        "note": ""
     }
 }
