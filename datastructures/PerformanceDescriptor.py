@@ -5,6 +5,7 @@ class PerformanceDescriptor(BaseModel):
     """Description of the user cycling performance"""
     kilometre_per_day: int = 0
     positive_height_difference_per_day: int = 0
+    # TODO : gestire il caso delle metriche non stabilite con None
 
     def get_kilometre_per_day(self) -> int:
         return self.kilometre_per_day
