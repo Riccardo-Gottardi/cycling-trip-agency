@@ -1,7 +1,9 @@
 .env
 
 */__pycache__/*
-.vscode/*
+.vscode
+.idea
+.venv
 
 test_blackbox/*
 

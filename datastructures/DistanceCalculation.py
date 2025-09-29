@@ -1,5 +1,9 @@
 import math
 
+# TODO move this calss into a folder called utility
+# it is a class but it doesn't hold any information
+# there fore it should not be in the datastructure folder
+
 class DistanceCalculation:
     @classmethod
     def fcc_distance(cls, a: list[float], b: list[float]) -> float:
