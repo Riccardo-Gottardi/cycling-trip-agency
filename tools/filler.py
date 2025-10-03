@@ -1,5 +1,5 @@
 from pydantic_ai import RunContext
-from datastructures.dependencies import MyDeps
+from datastructures.MyDeps import MyDeps
 
 
 def fill_trip_description(ctx: RunContext[MyDeps], bike_type: None | str = None, places: None | list[str] = None, duration: None | int = None, dates: None | list[str] = None, selected_route: None | int = None) -> None | str:
@@ -43,7 +43,7 @@ def fill_user_preferences_deprecated(ctx: RunContext[MyDeps], amenity: None | di
         ```
     """
     try:
-        ctx.deps.user.preferences.fill(amenity, tourism, natural, historic, building, water, leisure, man_made)
+        ctx.deps.user.pois_preferences.fill(amenity, tourism, natural, historic, building, water, leisure, man_made)
     except Exception as e:
         return str(e)
     
@@ -61,7 +61,7 @@ def fill_pois_preferences(ctx: RunContext[MyDeps], poi_category: str, poi_prefer
         ```
     """
     try:
-        ctx.deps.user.preferences.add_pois_preference(poi_category, poi_preference_type, poi_preference_detail)
+        ctx.deps.user.pois_preferences.add_preference(poi_category, poi_preference_type, poi_preference_detail)
     except Exception as e:
         return str(e)
 

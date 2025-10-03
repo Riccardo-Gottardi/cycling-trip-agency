@@ -11,17 +11,17 @@ class DistanceCalculation:
         lat_a, lon_a, _ = a
         lat_b, lon_b, _ = b
 
-        difference_in_lon = lon_a - lon_b
         difference_in_lat = lat_a - lat_b
+        difference_in_lon = lon_a - lon_b
 
-        mean_latitude = (lat_a + lat_b) / 2
+        mean_latitude = (math.radians(lat_a) + math.radians(lat_b)) / 2
 
         k1 = 111.13209 - 0.56605 * math.cos(2 * mean_latitude) + 0.00120 * math.cos(4 * mean_latitude)
         k2 = 111.41513 * math.cos(mean_latitude) - 0.09455 * math.cos(3 * mean_latitude) + 0.00012 * math.cos(5 * mean_latitude)
 
         d = math.sqrt(math.pow(k1 * difference_in_lat, 2) + math.pow(k2 * difference_in_lon, 2))
         
-        return d
+        return d * 1000
     
     @classmethod
     def euclidean_distance(cls, a: list[float], b: list[float]) -> float:

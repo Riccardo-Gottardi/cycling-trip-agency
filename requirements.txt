@@ -1,5 +1,6 @@
 python_dotenv==1.1.1
 requests==2.32.5
-pydantic==2.11.7
-pydantic-ai==0.7.5
+pydantic==2.11.9
+pydantic-ai==1.0.14
 logfire==4.3.5
+logfire[requests]

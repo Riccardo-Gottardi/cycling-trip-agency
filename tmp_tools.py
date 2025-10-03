@@ -14,7 +14,14 @@ out body;
 """
 
 def get_place_suggestions(place_cord: list[float], radius: int) -> list: 
-	"""Given a point and a radius it return 10 city in the area of radius radius from the place at place_cord"""
+	"""Return 10 city in the circular area of the radius provoded from the place specified
+	Args:
+		place_cord (list[float]): list of the coordinates. [lan, lon, ...]
+		radius (int): 
+	Returns:
+	Examples:
+	
+	"""
 	url = "https://overpass-api.de/api/interpreter"
 	query = f"[out:json][timeout:25];node[\"place\"~\"city|town\"](around:{radius},{place_cord[0]},{place_cord[1]});out geom qt 10;"
 
@@ -65,3 +72,4 @@ for c in cities :
 		print(name_it, end="\n\n")
 	else:
 		print(c.get("tags").get("name"), end="\n\n")
+

@@ -40,11 +40,13 @@ class Place(BaseModel):
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
 
-        if response.json():
+        if len(response.json()) > 0:
             json_response = response.json()[0]
             self.osm_name = str(json_response["display_name"])
             self.lat = float(json_response["lat"])
             self.lon = float(json_response["lon"])
+        else:
+            raise Exception(f"Error in Place.__set_coordinates()\n The given place, {self.name}, was not found")
 
     def get_name(self) -> str:
         """Get the name of the place"""
