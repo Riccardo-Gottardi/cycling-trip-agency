@@ -2,7 +2,7 @@ from dotenv import load_dotenv
 import logfire, yaml
 from pydantic_ai import Agent, Tool
 from datastructures.FinalResults import PlannerFinalResult
-from tools.route_planner_tools import approximate_itinerary_distance, return_final_result
+from tools.route_planner_tools import approximate_itinerary_distance
 
 load_dotenv()
 

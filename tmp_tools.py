@@ -73,3 +73,4 @@ for c in cities :
 	else:
 		print(c.get("tags").get("name"), end="\n\n")
 
+
