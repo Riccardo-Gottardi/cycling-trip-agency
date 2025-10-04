@@ -72,8 +72,9 @@ def run_route_calculator(deps: MyDeps) -> GPXData | None:
 
         
 if __name__ == "__main__":
-    # planner_result: Itinerary | None = run_route_planner()
-    planner_result = Itinerary(stages=['Cividale del Friuli', 'Stregna', 'Pulfero', 'San Daniele del Friuli', 'Tarvisio'])
+    planner_result: Itinerary | None = run_route_planner()
+    # For testing purposes (bypass the planner)
+    # planner_result = Itinerary(stages=['Cividale del Friuli', 'Stregna', 'Pulfero', 'San Daniele del Friuli', 'Tarvisio'])
     print(planner_result)
 
     if planner_result is not None:
