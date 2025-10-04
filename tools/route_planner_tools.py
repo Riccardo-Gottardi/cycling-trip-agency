@@ -1,9 +1,9 @@
 from datastructures.Place import Place
-from datastructures.DistanceCalculation import DistanceCalculation
-from datastructures.FinalResults import PlannerFinalResult
+from utility.distance_calculation import fcc_distance
+from datastructures.FinalResults import Itinerary
 
 
-def approximate_itinerary_distance(places: list[str]):
+def approximate_itinerary_length(places: list[str]):
     """Given a collection of places, that made up the itinerary, it calculate the total length of the itinerary
     Args:
         places (list[str]): list of the names of the places that made up the itinerary 
@@ -13,7 +13,7 @@ def approximate_itinerary_distance(places: list[str]):
         Exception: if a place is not found or other error occurs
     Example:
         ```python
-        approximate_itinerary_distance(["Trieste", "Gemona", "Udine"])
+        approximate_itinerary_length(["Trieste", "Gemona", "Udine"])
         ```
     """
     try:
@@ -24,6 +24,6 @@ def approximate_itinerary_distance(places: list[str]):
     d = 0
 
     for i in range(1, len(tmp)):
-        d += DistanceCalculation.fcc_distance(tmp[i-1].get_coordinates(), tmp[i].get_coordinates())
+        d += fcc_distance(tmp[i-1].get_coordinates(), tmp[i].get_coordinates())
 
     return d

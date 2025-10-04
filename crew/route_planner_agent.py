@@ -1,8 +1,8 @@
 from dotenv import load_dotenv
 import logfire, yaml
 from pydantic_ai import Agent, Tool
-from datastructures.FinalResults import PlannerFinalResult
-from tools.route_planner_tools import approximate_itinerary_distance
+from datastructures.FinalResults import Itinerary
+from tools.route_planner_tools import approximate_itinerary_length
 
 load_dotenv()
 
@@ -29,15 +29,17 @@ Goal: Plan the trip itinerary
     example: ["Tarvisio", "Gemona", "San Daniele del Friuli", "Udine", "Palmanova", "Aquileia", "Grado"]
 """
 logfire.log("info", "Creation of: \troute_planner_agent")
-route_planner = Agent[None, str | PlannerFinalResult](
+route_planner = Agent[None, str | Itinerary](
     model = agent_info.get("llm"),
     system_prompt = prompt,
-    output_type = str | PlannerFinalResult,
+    output_type = str | Itinerary,
     tools = [
-        Tool(approximate_itinerary_distance, docstring_format="google"),
+        Tool(approximate_itinerary_length, docstring_format="google"),
     ]
 )
 
+"""
 @route_planner.system_prompt
-def add_PlannerFinalResult_shema() -> str:
-    return f"PlannerFinalResult class json schema: {PlannerFinalResult.model_json_schema()}"
+def add_Itinerary_shema() -> str:
+    return f"Itinerary class json schema: {Itinerary.model_json_schema()}"
+"""

@@ -48,11 +48,11 @@ class Place(BaseModel):
         else:
             raise Exception(f"Error in Place.__set_coordinates()\n The given place, {self.name}, was not found")
 
-    def get_name(self) -> str:
+    def get_osm_name(self) -> str:
         """Get the name of the place"""
         return self.osm_name
     
-    def get_users_name(self) -> str:
+    def get_name(self) -> str:
         """get the user's name"""
         return self.name
 

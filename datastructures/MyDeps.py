@@ -8,4 +8,4 @@ from datastructures.Recommendation import Recommendation
 class MyDeps:
     trip: TripDescriptor
     user: UserDescriptor
-    recommendation: Recommendation
+    # recommendation: Recommendation

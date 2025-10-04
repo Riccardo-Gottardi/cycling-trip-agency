@@ -1,22 +1,19 @@
 from pydantic import BaseModel
 import requests
-from datetime import date, timedelta
+import gpxpy
+import gpxpy.gpx
 from datastructures.Place import Place
-from datastructures.DistanceCalculation import DistanceCalculation
 
 
 class TripDescriptor(BaseModel):
     """Description of a bicycle trip
-    Args:
+    Attributes:
         bike_type (str | None): either road, gravel, mtb. Is the type of bike
-        places (list[Place] | None): list of places, the first is the starting point, the last is the ending point
+        itinerary (list[Place] | None): list of places, the first is the starting point, the last is the ending point
+        segmented_itinerary (list[list[Place]] | None): list of segments of the itinerary
         duration (int | None): the number of days the trip will last
-        dates (list[date] | None): starting and ending date of the trip
-        candidate_routes (list[list[list[float]]] | None): list of candidate raw routes, each route is a list of geopoints, each geopoint is a list of 3 coordinates (lat, lon, elv)
-        selected_route (int | None): index of the selected raw route
-        stepped_route (list[list[list[float]]] | None): division of the trip as segments, list of geographical positions
-        length (float | None): length of the route in meters
-
+        gpx_segments (list[str] | None): list of gpx formatted strings, each one representing a segment of the trip
+        gpx_route (str | None): a gpx formatted string representing the whole trip
     Examples:
         ```python
         trip = TripDescriptor()
@@ -24,98 +21,88 @@ class TripDescriptor(BaseModel):
             bike_type = "gravel",
             duration = 4,
         )
-        trip.fill(places = ["Udine", "Palmanova", "Trieste"])
-        candidate_routes = trip.get_candidate_routes()
+        trip.fill(itinerary = ["Udine", "Palmanova", "Trieste"])
         ...
-        trip.fill(selected_route = 0)
-        stepped_route = trip.get_stepped_route()
+        trip.generate_gpx_route()
+        gpx_route = trip.get_gpx_route()
         ```
     """
     bike_type: str | None = None
-    places: list[Place] | None = None
+    itinerary: list[Place] | None = None
+    segmented_itinerary: list[list[Place]] | None = None
     duration: int | None = None
-    dates: list[date] | None = None
-    candidate_routes: list[list[list[float]]] | None = None
-    selected_route: int | None = None
-    stepped_route: list[list[list[float]]] | None = None 
-    length: float | None = None
-    positive_height_difference: float | None = None
+    gpx_segments: list[str] | None= None
+    gpx_route: str | None = None 
     
     def get_bike_type(self) -> str | None:
         return self.bike_type
     
-    def get_places(self) -> list[Place] | None:
-        return self.places
+    def get_itinerary(self) -> list[Place] | None:
+        return self.itinerary
+    
+    def get_segmented_itinerary(self) -> list[list[Place]] | None:
+        return self.segmented_itinerary
 
     def get_duration(self) -> int | None:
         return self.duration
     
-    def get_dates(self) -> list[date] | None:
-        return self.dates
-    
-    def get_candidate_routes(self) -> list[list[list[float]]] | None:
-        return self.candidate_routes
-    
-    def get_selected_route(self) -> int | None:
-        return self.selected_route + 1
+    def get_gpx_segments(self) -> list[str] | None:
+        return self.gpx_segments
 
-    def get_stepped_route(self) -> list[list[list[float]]] | None:
-        return self.stepped_route
+    def get_gpx_route(self) -> str | None:
+        return self.gpx_route
     
-    def get_length(self) -> float | None:
-        return self.length
-
-    def get_positive_height_difference(self) -> float | None:
-        return self.positive_height_difference
-
     @classmethod
     def get_class_description(cls) -> str:
         """Get a description of the class that represent the trip"""
         return """# TripDescriptor:
 - bike_type: str | None = None
     - describe the type of bike used for the trip, either road, gravel of mtb
-- places: list[Place] | None = None
+- itinerary: list[Place] | None = None
     - collect the different places that trip have to go through
+- segmented_itinerary: list[list[Place]] | None = None
+    - collect the different segments of the itinerary, each segment is a list of places
 - duration: int | None = None
     - the maximum number of days the user wants to spend on the trip
-- dates: list[date] | None = None
-    - the starting and ending date of the trip
-- candidate_routes: list[list[list[float]]] | None = None
-    - possible routes (based on places) to choose from
-- selected_route: int | None = None
-    - the index of the route chosen (among candidate_routes)
-- stepped_route: list[list[list[float]]] | None = None
-    - the final route divided in step
-- length: float | None = None
-    - the length of the trip
-    - set automatically
-- positive_height_difference: float | None = None
-    - the positive height difference of the trip
-    - set automatically
+- gpx_segments: list[str] = []
+    - the gpx segments of the trip, each segment is a gpx track in string format
+- gpx_route: str = ""
+    - the gpx route is the gpx track that represent the whole trip in string format
+
 """
 
     def get_description(self) -> str:
         """Get a description of the trip"""
         description = ""
         
-        if self.bike_type:
-            description += f"Bicycle profile: {self.bike_type}. "
-        if self.duration:
-            description += f"Number of days: {self.duration}. "
-        if self.places and len(self.places) > 0: 
-            description += f", from {self.places[0].get_name()} to {self.places[-1].get_name()}. "
-        if self.dates:
-            description += f" Dates: {self.dates[0]} to {self.dates[1]}. "
-        if self.candidate_routes:
-            description += f" Number of candidate routes: {len(self.candidate_routes)}. "
-        if self.selected_route:
-            description += f" Selected route index: {self.selected_route + 1}. "
-        if self.stepped_route:
-            description += f" Number of steps in the route: {len(self.stepped_route)}. "
-        if self.length:
-            description += f" Total length of the route: {self.length} meters. "
-        if self.positive_height_difference:
-            description += f" Positive height difference: {self.positive_height_difference} meters. "
+        if self.bike_type is not None:
+            description += f"\nBicycle type:\n{self.bike_type}.\n"
+
+        if self.duration is not None:
+            description += f"\nDuration:\n{self.duration}.\n"
+
+        if self.itinerary is not None and len(self.itinerary) > 0: 
+            description += f"\nItinerary:\n"
+            description += f"{self.itinerary[0].get_name()}"
+            for p in self.itinerary[1:]:
+                description += f" -> {p.get_name()}"
+
+        if self.segmented_itinerary is not None and len(self.segmented_itinerary) > 0:
+            description += f"\nSegmented itinerary:\n"
+            for segment in self.segmented_itinerary:
+                description += f"- Segment: "
+                description += f"{segment[0].get_name()}"
+                for place in segment[1:]:
+                    description += f" -> {place.get_name()}"
+                description += "\n"
+
+        if self.gpx_segments is not None and len(self.gpx_segments) > 0:
+            description += f"\nGPX segments:\n"
+            for i, segment in enumerate(self.gpx_segments):
+                description += f"- Segment {i+1}: {segment}"
+
+        if self.gpx_route is not None:
+            description += f"\nGPX route:\n{self.gpx_route}.\n"
 
         if description == "":
             description += "No trip information available."
@@ -126,50 +113,54 @@ class TripDescriptor(BaseModel):
         if not bike_type in ["road", "gravel", "mtb"]: raise Exception(f"Error in TripDescriptor.__set_bike_type()\nThe given bike_type must be one of BikeType type\n{bike_type} was provided")
         self.bike_type = bike_type
 
-    def __set_places(self, places: list[str]):  
-        if not len(places) > 1: raise Exception(f"Error in TripDescriptor.__set_places()\nThe given places must contain at least 2 elements, the starting and ending point of the trip\n{len(places)} were provided")
-        self.places = [Place(name=plc) for plc in places]
+    def __set_itinerary(self, itinerary: list[str]):  
+        if not len(itinerary) > 1: raise Exception(f"Error in TripDescriptor.__set_itinerary()\nThe given itinerary must contain at least 2 elements, the starting and ending point of the trip\n{len(itinerary)} were provided")
+        self.itinerary = [Place(name=plc) for plc in itinerary]
 
         not_found = ""
-        for place in self.places:
-            if place.get_name() == "":
-                not_found += f"{place.get_users_name()}, "
+        for place in self.itinerary:
+            if place.get_osm_name() == "":
+                not_found += f"{place.get_name()}, "
         if not_found != "":
-            raise Exception(f"Error in TripDescriptor.__set_places()\nFor the following places were not found: {not_found}")
+            raise Exception(f"Error in TripDescriptor.__set_itinerary()\nFor the following itinerary were not found: {not_found}")
+
+    def __set_segmented_itinerary(self, segmented_itinerary: list[list[str]]):
+        if not len(segmented_itinerary) > 0: raise Exception(f"Error in TripDescriptor.__set_segmented_itinerary()\nThe given segmented_itinerary must contain at least 1 element, the first segment of the trip\n{len(segmented_itinerary)} were provided")
+
+        self.segmented_itinerary = []
+
+        for segment in segmented_itinerary:
+            if not len(segment) > 1: raise Exception(f"Error in TripDescriptor.__set_segmented_itinerary()\nEach segment of the segmented_itinerary must contain at least 2 elements, the starting and ending point of the segment\n{len(segment)} were provided")
+
+            self.segmented_itinerary.append([Place(name=plc) for plc in segment])
+            not_found = ""
+            for place in self.segmented_itinerary[-1]:
+                if place.get_osm_name() == "":
+                    not_found += f"{place.get_name()}, "
+            if not_found != "":
+                raise Exception(f"Error in TripDescriptor.__set_segmented_itinerary()\nFor the following segmented_itinerary were not found: {not_found}")
 
     def __set_duration(self, duration: int):
         if not duration > 0: raise Exception(f"Error in TripDescriptor.__set_duration()\nThe given duration must be greater than 0\n{duration} was provided")
         self.duration = duration
 
-    def __set_dates(self, dates: list[str]):
-        if not len(dates) > 0: raise Exception(f"Error in TripDescriptor.__set_dates()\nThe given dates must contain at least 1 element, the starting date of the trip\n{len(dates)} were provided")
-        self.dates = [date.fromisoformat(d) for d in dates]
-
-    def __set_selected_route(self, selected_route: int):
-        if self.candidate_routes is None: raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nBefore selecting one of the candidate routes they must be created, please fill the route descriptor with places first\n")
-        if not 0 < selected_route <= len(self.candidate_routes): raise Exception(f"Error in RouteDescriptor.__set_selected_route()\nThe given selected_route must be between 1 and {len(self.candidate_routes)}\n{selected_route} was provided")
-        self.selected_route = selected_route - 1
-
-    def fill(self, bike_type: None | str = None, places: None | list[str] = None, duration: None | int = None, dates: None | list[str] = None, selected_route: None | int = None):
+    def fill(self, bike_type: None | str = None, itinerary: None | list[str] = None, segmented_itinerary: None | list[list[str]] = None, duration: None | int = None): 
         """Fill the TripDescriptor with the given info
         Args:
-            - bike_type (str) | None : is the type to bike, either road, gravel or mtb.
-            - places (list[str]) | None : list of places, the first is the starting point, the last is the ending point
-            - duration (int) | None : the number of days the trip will last
-            - dates (list[str]) | None : starting and ending date of the trip, formatted following iso 8601
-            - selected_route (int) | None : index of the selected raw route
-
+            bike_type (str) | None : is the type to bike, either road, gravel or mtb.
+            itinerary (list[str]) | None : list of itinerary, the first is the starting point, the last is the ending point
+            segmented_itinerary (list[list[str]]) | None : list of segments of the itinerary
+            duration (int) | None : the number of days the trip will last
         Return:
-            - None: if nothing went wrong
-            - str: containing an error explanation if something went wrong
-
+            None: if nothing went wrong
+            str: containing an error explanation if something went wrong
         Examples:
             ```python
             trip = TripDescriptor()
             trip.fill(
                 bike_type = "gravel",
                 duration = 4,
-                places = ["Udine", "Palmanova", "Trieste"],
+                itinerary = ["Udine", "Palmanova", "Trieste"],
             )
             ...
             trip.fill(dates = ["2023-10-1", "2023-10-5"])
@@ -181,117 +172,59 @@ class TripDescriptor(BaseModel):
             except Exception as e:
                 raise e
 
-        if places is not None:
+        if itinerary is not None:
             try:
-                self.__set_places(places) 
+                self.__set_itinerary(itinerary) 
+            except Exception as e:
+                raise e
+            
+        if segmented_itinerary is not None:
+            try:
+                self.__set_segmented_itinerary(segmented_itinerary) 
             except Exception as e:
                 raise e
 
         if duration is not None:
             try:
                 self.__set_duration(duration) 
-                self.__correct_eventual_inconsistency_between_dates_duration()
             except Exception as e:
                 raise e
 
-        if dates is not None:
-            try:
-                self.__set_dates(dates) 
-                self.__correct_eventual_inconsistency_between_dates_duration()
-            except Exception as e:
-                raise e
-
-        if selected_route is not None:
-            try:
-                self.__set_selected_route(selected_route) 
-            except Exception as e:
-                raise e
-
-    def __correct_eventual_inconsistency_between_dates_duration(self) -> None:
-        if self.dates is not None and len(self.dates) > 1 and self.duration is not None:
-            if (self.dates[1] - self.dates[0]).days + 1 != self.duration:
-                self.dates[1] = self.dates[0] + timedelta(days=self.duration - 1)
-
-    def __plan_route(self, idx: int) -> list[list[float]]:
-        """Get a route that goes through the places provided"""
+    def __generate_gpx_segments(self):
         bike_profile = self.bike_type
         if self.bike_type == "road":
             bike_profile = "fastbike"
 
-        locations_coordinates = [place.get_coordinates() for place in self.places] # pyright: ignore[reportOptionalIterable]
-        route = []
-        for i in range(1, len(locations_coordinates)):
-            lon_lat_string = f"{locations_coordinates[i-1][1]},{locations_coordinates[i-1][0]}|{locations_coordinates[i][1]},{locations_coordinates[i][0]}"
-            url = f"http://localhost:17777/brouter?lonlats={lon_lat_string}&profile={bike_profile}&alternativeidx={idx}&format=geojson"
-            response = requests.get(url)
-            response.raise_for_status()
+        self.gpx_segments = []        
 
-            route.extend(response.json()["features"][0]["geometry"]["coordinates"])
+        if self.segmented_itinerary is not None:
+            for segment in self.segmented_itinerary:
+                locations_coordinates = [place.get_coordinates() for place in segment] 
+                lon_lat_string = f"{locations_coordinates[0][1]},{locations_coordinates[0][0]}"
+                for coord in locations_coordinates:
+                    lon_lat_string += f"|{coord[1]},{coord[0]}"
 
-        return route
-    
-    def plan_candidate_routes(self):
-        """Plan 4 different routes that goes through the places provided"""
-        if self.places is None or len(self.places) < 2:
-            raise Exception("Error in RouteDescriptor.plan_candidate_routes()\nThe places are not set, please fill the route descriptor with places first\n")
-        if self.bike_type is None or self.bike_type not in ["road", "gravel", "mtb"]:
-            raise Exception("Error in RouteDescriptor.plan_candidate_routes()\nThe bike_type is not set, please fill the route descriptor with a valid bicycle profile first\n")
+                url = f"http://localhost:17777/brouter?lonlats={lon_lat_string}&profile={bike_profile}&alternativeidx=0&format=gpx"
+                response = requests.get(url)
+                response.raise_for_status()
 
-        self.candidate_routes = []
-        for i in range(4):
-            try:
-                route = self.__plan_route(i)
-            except Exception as e:
-                raise e
-            if len(route) > 0:
-                self.candidate_routes.append(route)
-    
-    def __check_consistency_duration_number_of_steps(self) -> None | str:
-        if not self.stepped_route:
-            raise Exception("Error in RouteDescriptor.__check_consistency_duration_number_of_steps()\nThe stepped_route is not set, please plan the stepped_route first\n")
+                self.gpx_segments.append(response.text)
 
-        if self.duration and len(self.stepped_route) > self.duration:
-            raise Exception("Error in RouteDescriptor.__check_consistency_duration_number_of_steps()\nThe number of steps in the route is greater than the number of days\n")
-    
-    def plan_steps(self, max_horizontal_distance: float = 40.0, max_elevation: float = 500.0):
-        """Plan the steps of the route based on the maximum distance"""
-        if self.candidate_routes is None or len(self.candidate_routes) == 0:
-            raise Exception("Error in RouteDescriptor.__plan_steps()\nThe candidate_routes is None, please fill the route descriptor with places first\n")
+    def __merge_gpx_segments(self):
+        merged = gpxpy.gpx.GPX()
+        combined_track = gpxpy.gpx.GPXTrack(name="Combined Segments")
 
-        if self.selected_route is None or self.selected_route < 0 or self.selected_route >= len(self.candidate_routes):
-            raise Exception(f"Error in RouteDescriptor.__plan_steps()\nThe selected_route is {self.selected_route}, it must be between 0 and {len(self.candidate_routes) - 1} (inclusive)\nPlease fill the route descriptor with a valid selected_route first\n")
-        
-        self.stepped_route = []
-        self.length = 0.0
-        self.positive_height_difference = 0.0
-        chosen_raw_route = self.candidate_routes[self.selected_route]
-        current_step = [chosen_raw_route[0]]
-        horizontal_distance = 0.0
-        positive_height_difference = 0.0
-        
-        for geopoint in chosen_raw_route[1:]:
-            horizontal_distance_increment = DistanceCalculation.fcc_distance(current_step[-1], geopoint)
-            positive_height_increment = DistanceCalculation.positive_elevation_distance(current_step[-1], geopoint)
+        if self.gpx_segments is not None:
+            for segment in self.gpx_segments:
+                gpx_segment = gpxpy.parse(segment)
 
-            if horizontal_distance + horizontal_distance_increment <= max_horizontal_distance and positive_height_difference + positive_height_increment <= max_elevation:
-                current_step.append(geopoint)
-                horizontal_distance += horizontal_distance_increment
-                positive_height_difference += positive_height_increment 
-            else:
-                self.stepped_route.append(current_step)
-                self.length += horizontal_distance
-                self.positive_height_difference += positive_height_difference
-                current_step = [self.stepped_route[-1][-1], geopoint]
-                horizontal_distance = horizontal_distance_increment
-                positive_height_difference = positive_height_increment
-        
-        if self.stepped_route != []:
-            if current_step != self.stepped_route[-1]:
-                self.stepped_route.append(current_step)
-        else:
-            self.stepped_route.append(current_step)
+                for seg in gpx_segment.tracks[0].segments:
+                    combined_track.segments.append(seg)
 
-        try:
-            self.__check_consistency_duration_number_of_steps()
-        except Exception as e:
-            return e
+        merged.tracks.append(combined_track)
+        return merged.to_xml()
+
+    def generate_gpx_route(self):
+        """Get a route that goes through the itinerary provided"""
+        self.__generate_gpx_segments()
+        self.gpx_route = str(self.__merge_gpx_segments())

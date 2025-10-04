@@ -1,7 +1,7 @@
 import requests, time, random
 from pydantic import BaseModel
 from datastructures.Place import Place
-from datastructures.DistanceCalculation import DistanceCalculation
+from utility.distance_calculation import fcc_distance
 
 
 class Recommendation(BaseModel):
@@ -56,7 +56,7 @@ class Recommendation(BaseModel):
 
                 if name and addr_city:
                     place = Place(name=f"{name}, {addr_city}")
-                    if place.get_name():
+                    if place.get_osm_name():
                         recommended_places.append(place)
                         i += 1
 
@@ -67,7 +67,7 @@ class Recommendation(BaseModel):
         distance_from_previous_search_point = search_radius
 
         for i in range(1, len(route)):
-            distance_from_previous_search_point += DistanceCalculation.fcc_distance(route[i-1], route[i])
+            distance_from_previous_search_point += fcc_distance(route[i-1], route[i])
             if distance_from_previous_search_point >= 2*search_radius:
                 try: 
                     pois = self.__get_amenity_pois(route[i], search_radius, amenity)

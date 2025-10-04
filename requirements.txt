@@ -4,3 +4,4 @@ pydantic==2.11.9
 pydantic-ai==1.0.14
 logfire==4.3.5
 logfire[requests]
+gpxpy==1.6.2

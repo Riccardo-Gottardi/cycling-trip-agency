@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 
-class PlannerFinalResult(BaseModel):
-    itinerary: list[str]
+class Itinerary(BaseModel):
+    stages: list[str]
 
-    def set_itinerary(self, itin: list[str]):
-        self.itinerary = itin
+class GPXData(BaseModel):
+    gpx: str

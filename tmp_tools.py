@@ -1,6 +1,6 @@
 import requests
 from datastructures.Place import Place
-from datastructures.DistanceCalculation import DistanceCalculation
+from utility.distance_calculation import fcc_distance
 
 """
 Udine coordinates: 46.063862, 13.236718
@@ -40,7 +40,7 @@ ud_cord = (46.063862, 13.236718)
 
 
 def get_intermediate_city_suggestions(a: list[float], b: list[float]):
-	radius = DistanceCalculation.fcc_distance(a, b) * 1000 / 2
+	radius = fcc_distance(a, b) * 1000 / 2
 	point = [
 		a[0] + (b[0] - a[0])/2, 
 		a[1] + (b[1] - a[1])/2
