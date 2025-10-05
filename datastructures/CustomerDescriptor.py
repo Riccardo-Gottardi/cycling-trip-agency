@@ -1,14 +1,14 @@
 from pydantic import BaseModel
 from datastructures.PerformanceDescriptor import PerformanceDescriptor
 
-class UserDescriptor(BaseModel):
+class CustomerDescriptor(BaseModel):
     """Description of the user
     Attributes:
         performance (PerformanceDescriptor): measure of the user cycling performance of the user
 
     Examples:
         ```python
-        user = UserDescriptor()
+        user = CustomerDescriptor()
         user.set_performance(
             kilometre_per_day=100,
             elevatoin_gain_per_day=500
@@ -31,7 +31,7 @@ class UserDescriptor(BaseModel):
     
     def get_class_description(self) -> str:
         """Get a string description of the class that represent the user"""
-        return f"""# UserDescriptor:
+        return f"""# CustomerDescriptor:
 - performance: PerformanceDescriptor
 {self.performance.get_class_description()}
 """

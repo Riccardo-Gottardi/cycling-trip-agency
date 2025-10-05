@@ -5,3 +5,6 @@ class Itinerary(BaseModel):
 
 class GPXData(BaseModel):
     gpx: str
+
+class MessageToCustomer(BaseModel):
+    message: str

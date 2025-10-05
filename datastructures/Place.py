@@ -4,16 +4,16 @@ from pydantic import BaseModel
 class Place(BaseModel):
     """Represent a place
     Args:
-        name (str): name of the place, it can be a city, a street, a point of interest, etc.
-        osm_name (str): name of the 
+        name (str): name of the place, it can be a city, a street, a point of interest, etc.. For better results, it is recommended to add the country name
+        osm_name (str): name of the place as it appears in OpenStreetMap
         lat (float | None): latitude of the place, if None, it will be set automatically
         lon (float | None): longitude of the place, if None, it will be set automatically
         elv (float | None): elevation of the place, if None, it will be set automatically
 
     Examples:
         ```python
-        udine = Place(name="Udine")
-        louis_pordenone = Place(name="Louis, Pordenone")
+        udine = Place(name="Udine, Italy")
+        louis_pordenone = Place(name="Louis, Pordenone, Italy") # it raises an exception, because the place is not found
         ```
     """
     name: str

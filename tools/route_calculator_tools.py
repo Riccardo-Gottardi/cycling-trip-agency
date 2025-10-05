@@ -7,14 +7,14 @@ from utility.distance_calculation import fcc_distance
 def approximate_segment_length(places: list[str]):
     """Given a collection of places, that made up the segment, it calculate the total length of the segment
     Args:
-        places (list[str]): list of the names of the places that made up the segment
+        places (list[str]): list of the names of the places that made up the segment. For more precise results, use the full name (e.g. "City, Country")
     Returns:
         int: the approximate length of the segment in meters
     Raises:
         Exception: if a place is not found or other error occurs
     Example:
         ```python
-        approximate_segment_length(["Trieste", "Monfalcone", "Gemona"])
+        s_length = approximate_segment_length(["Trieste, Italy", "Monfalcone, Italy", "Gemona, Italy"])
         ```
     """
     try:
@@ -36,4 +36,7 @@ def generate_gpx_route(ctx: RunContext[MyDeps]):
         generate_gpx_route()
         ```
     """
-    ctx.deps.trip.generate_gpx_route()
+    try:
+        ctx.deps.trip.generate_gpx_route()
+    except Exception as e:
+        return str(e)

@@ -1,6 +1,6 @@
 from datastructures.Place import Place
 from utility.distance_calculation import fcc_distance
-from datastructures.FinalResults import Itinerary
+from datastructures.agents_results import Itinerary
 
 
 def approximate_itinerary_length(places: list[str]):
