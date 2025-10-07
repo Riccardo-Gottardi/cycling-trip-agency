@@ -7,7 +7,7 @@ from datastructures.TripDescriptor import TripDescriptor
 from datastructures.CustomerDescriptor import CustomerDescriptor
 from datastructures.Recommendation import Recommendation
 from datastructures.MyDeps import MyDeps
-from datastructures.agents_results import Itinerary, GPXData, MessageToCustomer
+from datastructures.agents_response import Itinerary, GPXDataIsReady, MessageToCustomer
 
 load_dotenv()
 
@@ -46,7 +46,7 @@ def run_route_planner() -> Itinerary | None:
             return None
 
 
-def run_route_calculator(deps: MyDeps) -> GPXData | None:
+def run_route_calculator(deps: MyDeps) -> GPXDataIsReady | None:
     history: list[ModelMessage] = []
     user_input = ""
 
@@ -68,7 +68,7 @@ def run_route_calculator(deps: MyDeps) -> GPXData | None:
                 print("The user forced loop termination")
                 return None
 
-        elif isinstance(result.output, GPXData):
+        elif isinstance(result.output, GPXDataIsReady):
             return result.output
 
 
@@ -77,6 +77,7 @@ if __name__ == "__main__":
     planner_result: Itinerary | None = run_route_planner()
     # For testing purposes (bypass the planner)
     # planner_result = Itinerary(stages=['Cividale del Friuli, Italy', 'Stregna, Italy', 'Pulfero, Italy', 'San Daniele del Friuli, Italy', 'Tarvisio, Italy'])
+    # planner_result = Itinerary(stages=['Padova, Italy', 'Vittorio Veneto, Italy', 'Aviano, Italy', 'Polcenigo, Italy', "Cansiglio, Italy"])
     print(planner_result)
 
     if planner_result is not None:
@@ -87,10 +88,15 @@ if __name__ == "__main__":
             trip=trip,
             user=CustomerDescriptor(),
         )
-        calculator_result: GPXData | None = run_route_calculator(deps)
+        calculator_result: GPXDataIsReady | None = run_route_calculator(deps)
 
         print(calculator_result)
+
         print("\n")
-        print(deps.trip.get_gpx_route())
+
+        gpx_data = deps.trip.get_gpx_route()
+        if gpx_data is not None:
+            with open("output_route.gpx", "w") as f:
+                f.write(gpx_data)
     else:
         logfire.log("info", "No itinerary generated, skipping route calculation")

@@ -4,7 +4,7 @@ from dotenv import load_dotenv
 from pydantic_ai import Agent, RunContext, Tool
 
 from datastructures.MyDeps import MyDeps
-from datastructures.agents_results import GPXData, MessageToCustomer
+from datastructures.agents_response import GPXDataIsReady, MessageToCustomer
 
 from tools.route_calculator_tools import generate_gpx_route, approximate_segment_length
 from tools.filler import fill_trip_description, fill_pois_preferences, fill_user_performance, fill_user_additional_note
@@ -32,7 +32,7 @@ logfire.log("info", "Creation of: \troute_calculator_agent")
 route_calculator = Agent(
     model = agent_info.get("llm"),
     deps_type = MyDeps,
-    output_type = MessageToCustomer | GPXData,
+    output_type = MessageToCustomer | GPXDataIsReady,
     system_prompt = prompt, # pyright: ignore[reportPossiblyUnboundVariable]
     tools = [
         Tool(fill_trip_description, takes_ctx=True, docstring_format="google", max_retries=3),

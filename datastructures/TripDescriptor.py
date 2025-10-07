@@ -201,7 +201,7 @@ class TripDescriptor(BaseModel):
             for segment in self.segmented_itinerary:
                 locations_coordinates = [place.get_coordinates() for place in segment] 
                 lon_lat_string = f"{locations_coordinates[0][1]},{locations_coordinates[0][0]}"
-                for coord in locations_coordinates:
+                for coord in locations_coordinates[1:]:
                     lon_lat_string += f"|{coord[1]},{coord[0]}"
 
                 url = f"http://localhost:17777/brouter?lonlats={lon_lat_string}&profile={bike_profile}&alternativeidx=0&format=gpx"
