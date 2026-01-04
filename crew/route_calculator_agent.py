@@ -6,7 +6,8 @@ from pydantic_ai import Agent, RunContext, Tool
 from datastructures.MyDeps import MyDeps
 from datastructures.agents_response import GPXDataIsReady, MessageToCustomer
 
-from tools.route_calculator_tools import generate_gpx_route, approximate_segment_length
+from tools.route_calculator_tools import generate_gpx_route
+from tools.segment_length import approximate_segment_length
 from tools.filler import fill_trip_description, fill_pois_preferences, fill_user_performance, fill_user_additional_note
 
 
@@ -51,6 +52,6 @@ The user is described by the following class:\n{str(ctx.deps.user.get_class_desc
 
 @route_calculator.system_prompt(dynamic=True)
 def add_current_descriptions_to_system_prompt(ctx: RunContext[MyDeps]) -> str:
-    return f"""Current trip informations are: {str(ctx.deps.trip.get_description())}
-Current user informations are: {str(ctx.deps.user.get_description())}
+    return f"""TripDescriptor currently holds: {str(ctx.deps.trip.get_description())}
+CustomerDescriptor currently holds: {str(ctx.deps.user.get_description())}
 """

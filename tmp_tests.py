@@ -1,4 +1,7 @@
 from datastructures.Place import Place
+from dotenv import load_dotenv
+import logfire
+
 """Check the exception handling in Place class
 try:
     l = Place(name="louis, pordenone, italy")
@@ -42,9 +45,30 @@ for l in response.text.split("\n")[:15]:
     print(l)
 """
 
+"""
 from tools.route_calculator_tools import approximate_segment_length
 
 segments = [["Pordenone, Italy", "Rivignano Teor, Italy"], ["Rivignano Teor, Italy", "Aquileia, Italy"], ["Pordenone, Italy", "Varmo, Italy"], ["Varmo, Italy", "Aquileia, Italy"], ["Pordenone, Italy", "Morsano al Tagliamento, Italy"], ["Morsano al Tagliamento, Italy", "Aquileia, Italy"]]
 
 for seg in segments:
     print(f"{" -> ".join([p for p in seg])}, length: {approximate_segment_length(seg)} m")
+"""
+
+"""
+from datastructures.TripDescriptor import TripDescriptor
+
+trip = TripDescriptor()
+trip.fill(itinerary=["Maniago, Italy", "Aviano, Italy", "Vittorio Veneto, Italy", "Sacile, Italy", "Pordenone, Italy", "San Vito al Tagliamento, Italy", "Aquileia, Italy"])
+trip.fill(segmented_itinerary=[
+	["Maniago, Italy", "Aviano, Italy", "Vittorio Veneto, Italy"],
+	["Vittorio Veneto, Italy", "Sacile, Italy", "Pordenone, Italy", "San Vito al Tagliamento, Italy"],
+	["San Vito al Tagliamento, Italy", "Aquileia, Italy"]
+])
+trip.generate_gpx_route()
+
+gpx_data = trip.get_gpx_route()
+
+if gpx_data is not None:
+    with open("output_route.gpx", "w") as f:
+        f.write(gpx_data)
+"""

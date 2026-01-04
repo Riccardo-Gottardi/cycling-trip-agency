@@ -27,12 +27,17 @@ class TripDescriptor(BaseModel):
         gpx_route = trip.get_gpx_route()
         ```
     """
+    __already_used_places: dict[str, Place]
     bike_type: str | None = None
     itinerary: list[Place] | None = None
     segmented_itinerary: list[list[Place]] | None = None
     duration: int | None = None
     gpx_segments: list[str] | None= None
     gpx_route: str | None = None 
+
+    def __init__(self, **data):
+        super().__init__(**data)
+        self.__already_used_places = {}
     
     def get_bike_type(self) -> str | None:
         return self.bike_type
@@ -115,14 +120,23 @@ class TripDescriptor(BaseModel):
 
     def __set_itinerary(self, itinerary: list[str]):  
         if not len(itinerary) > 1: raise Exception(f"Error in TripDescriptor.__set_itinerary()\nThe given itinerary must contain at least 2 elements, the starting and ending point of the trip\n{len(itinerary)} were provided")
-        self.itinerary = [Place(name=plc) for plc in itinerary]
 
-        not_found = ""
-        for place in self.itinerary:
-            if place.get_osm_name() == "":
-                not_found += f"{place.get_name()}, "
-        if not_found != "":
-            raise Exception(f"Error in TripDescriptor.__set_itinerary()\nFor the following itinerary were not found: {not_found}")
+        self.itinerary = []
+        not_found = []
+
+        for place in itinerary:
+            if place.lower() in self.__already_used_places:
+                self.itinerary.append(self.__already_used_places[place.lower()])
+            else:
+                try:
+                    new_place = Place(name=place)
+                    self.__already_used_places[place.lower()] = new_place
+                    self.itinerary.append(new_place)
+                except Exception as e:
+                    not_found.append(place)
+
+        if not_found:
+            raise Exception(f"Error in TripDescriptor.__set_itinerary()\nFor the following itinerary were not found: {", ".join(not_found)}")
 
     def __set_segmented_itinerary(self, segmented_itinerary: list[list[str]]):
         if not len(segmented_itinerary) > 0: raise Exception(f"Error in TripDescriptor.__set_segmented_itinerary()\nThe given segmented_itinerary must contain at least 1 element, the first segment of the trip\n{len(segmented_itinerary)} were provided")

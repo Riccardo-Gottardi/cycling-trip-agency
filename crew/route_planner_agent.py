@@ -2,9 +2,11 @@ from dotenv import load_dotenv
 import logfire, yaml
 from pydantic_ai import Agent, Tool
 from datastructures.agents_response import Itinerary
-from tools.route_planner_tools import approximate_itinerary_length
+from tools.segment_length import approximate_segment_length
+
 
 load_dotenv()
+
 
 with open("./crew/crew.yaml", "r") as crew_conf:
     try:
@@ -34,7 +36,7 @@ route_planner = Agent[None, str | Itinerary](
     system_prompt = prompt,
     output_type = str | Itinerary,
     tools = [
-        Tool(approximate_itinerary_length, docstring_format="google"),
+        Tool(approximate_segment_length, docstring_format="google"),
     ]
 )
 

@@ -1,15 +1,9 @@
 .env
 
-*/__pycache__/*
+__pycache__
 .vscode
 .idea
 .venv
 
-test_blackbox/*
-
-bad_doc.md
-note.md
-new_prompt.md
-tmp.py
-tmp_test.py
+tmp_tests.py
 tmp_tools.py

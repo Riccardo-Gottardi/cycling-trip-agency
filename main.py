@@ -41,6 +41,7 @@ def run_route_planner() -> Itinerary | None:
         # Get the input from the user
         # Actually the User response to the Agent response
         user_input = input("User:\n")
+        print()
         if user_input.lower().strip() in ("exit", "quit"):
             print("The user forced loop termination")
             return None
@@ -64,6 +65,7 @@ def run_route_calculator(deps: MyDeps) -> GPXDataIsReady | None:
             # Get the input from the user
             # Actually the User response to the Agent response
             user_input = input("User:\n")
+            print()
             if user_input.lower().strip() in ("exit", "quit"):
                 print("The user forced loop termination")
                 return None

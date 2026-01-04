@@ -32,7 +32,7 @@ Within in mind the criteria to use, the itinerary segmentation process consists 
 
 With the performance based criteria you have to present to the customer segments that have an appropriate length, so, each segment should have length close to the distance the customer can handle daily. Therefore the length of a segment should adhere to the following constraints:
 
-- A segment should not have length greater than the user daily capabilities plus 10 kilometre (that set a maximum.
+- A segment should not have length greater than the user daily capabilities plus 10 kilometre (that set a maximum).
 - A segment should not have length less than the user daily capabilities minus 10 kilometre.
 
 #### Duration based criteria
