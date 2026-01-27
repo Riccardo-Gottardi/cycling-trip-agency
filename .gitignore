@@ -1,7 +1,16 @@
+# Private files
 .env
-__pycache__/*
-.vscode
-.idea
-.venv
+
+# IDE folders
+.vscode/
+.idea/
+
+# Environment
+.venv/
+
+# Other folders
+__pycache__/
+
+# Other files
 tmp_tests.py
 tmp_tools.py
