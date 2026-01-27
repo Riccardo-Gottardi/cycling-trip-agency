@@ -1,9 +1,17 @@
 # Context
+The current repository represent the project developed for my bachelor thesis, whose pdf can be found 
+
 ## Bigger project
 Develop an intelligent conversational system for personalized cycling trip planning.
 
 ## My task
 Explore the feasibility of the creation of such a system, analysing methodologies of artificial intelligence applied to trip planning, steps optimization and base experience personalization based on the user preferences.
+
+# Versions
+The thesis was written based on the project version of the commit 59cde569211997f09d5317400d1af6eaf3ec1f6d
+
+The project was restructured due to usability issue, on the previous implementation ..., now the the agent produce and actual gpx file, so propose a trip, still it need prompt improvement.
+it leverage more the llms capabilities 
 
 # To get started
 ## Get the code
